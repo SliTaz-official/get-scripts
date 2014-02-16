@@ -1,0 +1,159 @@
+#!/bin/sh
+# get-LibreOffice - install LibreOffice excl. KDE/Gnome integration & test suite.
+#
+# (C) 2010 SliTaz - GNU General Public License v3.
+# Author : Ben Arnold <ben@seawolfsanctuary.com>
+#    via : get-OpenOffice3 (Eric Joseph-Alexandre <erjo@slitaz.org>)
+#
+
+PACKAGE="LibreOffice"
+WEB_SITE="http://www.libreoffice.org"
+CATEGORY="office"
+SHORT_DESC="Productivity suite."
+DEPENDS="cups"
+SUGGESTED="java6-jre"
+DIR="stable"
+PREFIX="LibreOffice"
+SUFFIX="Linux_x86_rpm.tar.gz"
+WGET_URL="http://download.documentfoundation.org/libreoffice/$DIR"
+
+VERSION="$(basename $(wget -O - $WGET_URL/ 2> /dev/null | \
+	sed '/href=\"[0-9]/!d;s/.*href=\"//;s/[/\">].*//' | tail -1))"
+if [ -z "$VERSION" ]; then
+	abort_package "Can't detect an appropriate version. The version numbering or URL may have changed. Aborted."
+fi
+VER="${VERSION/\-/}" # without hyphens
+
+
+TARBALL="${PREFIX}_${VER}_${SUFFIX}"
+
+for LOC in ${LANG/_/-} ${LANG%_*}; do
+	L_SUFFIX="Linux_x86_rpm_langpack_$LOC.tar.gz"
+	L_TARBALL="${PREFIX}_${VER}_${L_SUFFIX}"
+	LANG_URL="$WGET_URL/${VERSION}/rpm/x86/${L_TARBALL}"
+	busybox wget -s $LANG_URL 2> /dev/null || continue
+	echo "Added $LANG ($LOC)."
+	break
+done
+WGET_URL="$WGET_URL/${VERSION}/rpm/x86/${TARBALL}"
+
+CUR_DIR=$(pwd)
+TEMP_DIR="/tmp/$PACKAGE.$$"
+SOURCE_DIR="/tmp/src.$$"
+EXCLUDE="kde|gnome|test"
+LOG="/tmp/$(basename $0 .sh).log"
+
+# Check if we have the tarball before.
+if [ ! -f $SOURCE_DIR/$TARBALL ]; then
+	echo "Downloading LibreOffice tarball (it's time to have a break)... "
+	# Check if $SOURCE_DIR exist
+	test -d $SOURCE_DIR || mkdir -p $SOURCE_DIR
+	# Get the file.
+	wget -c $WGET_URL -O $SOURCE_DIR/$TARBALL
+	if [ -n $L_TARBALL ] ; then # Are we localised?
+		wget -c $LANG_URL -O $SOURCE_DIR/$L_TARBALL
+	fi
+	status
+fi
+if [ ! -f $SOURCE_DIR/$TARBALL ]; then
+	rm -rf $SOURCE_DIR
+	abort_package "Could not download $TARBALL. Exiting."
+fi
+
+echo -n "Extracting files (this may take a while): "
+
+# Creates TEMP_DIR and extract tarball
+mkdir -p $TEMP_DIR
+for TB in $TARBALL $L_TARBALL ; do
+	tar xvzf $SOURCE_DIR/$TB -C $TEMP_DIR > $LOG 2>&1 ||
+	abort_package "Failed to extract $TB"
+done
+
+# Get version found in archive (often directory is still RC version when final is present)
+ARCHIVED_VERSION=$(find $TEMP_DIR -type d 2> /dev/null | sed "/$PREFIX/!d;\$!d;s/_/ /g" | awk '{print $2}')
+echo -n "(found v${ARCHIVED_VERSION})"
+
+# Consolidate localisations into main package
+if [ -n $L_TARBALL ] ; then # Are we localised?
+	  TARBALL_NAME="${TARBALL/.tar.gz/}"
+	L_TARBALL_NAME="${L_TARBALL/.tar.gz/}"
+	mv -f $TEMP_DIR/${L_TARBALL_NAME/$VERSION/$ARCHIVED_VERSION}/RPMS/*.rpm $TEMP_DIR/${TARBALL_NAME/$VERSION/$ARCHIVED_VERSION}/RPMS/
+fi
+status
+
+# Extracted pkg can be removed: Save RAM
+rm -rf $SOURCE_DIR
+
+# Extract everything from RPMS
+cd $TEMP_DIR/${TARBALL_NAME/$VERSION/$ARCHIVED_VERSION}/RPMS
+for i in *.rpm
+do
+	if (! echo $i | egrep -qi $EXCLUDE); then
+		echo -n "."
+		(rpm2cpio $i | cpio -id >> $LOG 2>&1 ) && rm  -f $i
+	fi
+done
+rpm2cpio libobasis*-gnome-integration*.rpm | cpio -id >> $LOG 2>&1
+
+# extracted pkg can be removed: Save RAM
+rm -f libobasis*.rpm
+
+status
+echo -n "Preparing package... "
+
+# Make the package
+mkdir -p $PACKAGE-$VERSION/fs/usr/lib $PACKAGE-$VERSION/fs/usr/share
+
+# use mv instead of 'cp -a' to save RAM
+mv opt/libreoffice* $PACKAGE-$VERSION/fs/usr/lib/libreoffice
+mv usr/share/mime $PACKAGE-$VERSION/fs/usr/share
+mv usr/share/icons $PACKAGE-$VERSION/fs/usr/share
+mv usr/bin $PACKAGE-$VERSION/fs/usr
+
+# relocalized libexec directory
+bin=$(echo $PACKAGE-$VERSION/fs/usr/bin/libreoffice${VERSION%.*})
+if [ -L $bin ]; then
+	target=$(readlink $bin)
+	rm -f $bin
+	ln -s ${target/opt/usr\/lib\/libreoffice} $bin
+else
+	sed -i 's#/opt/#/usr/lib/libreoffice/#'  $bin
+fi
+
+# Create receipt
+cat > $PACKAGE-$VERSION/receipt <<EOT
+# SliTaz package receipt.
+
+PACKAGE="$PACKAGE"
+VERSION="$VERSION"
+CATEGORY="$CATEGORY"
+SHORT_DESC="$SHORT_DESC"
+WEB_SITE="$WEB_SITE"
+
+DEPENDS="$DEPENDS"
+SUGGESTED="$SUGGESTED"
+
+post_install()
+{
+	cd \$1/usr/share/applications
+	ln -s /usr/lib/libreoffice*/share/xdg/base.desktop          libreoffice-base.desktop
+	ln -s /usr/lib/libreoffice*/share/xdg/impress.desktop       libreoffice-impress.desktop
+	ln -s /usr/lib/libreoffice*/share/xdg/writer.desktop        libreoffice-writer.desktop
+	ln -s /usr/lib/libreoffice*/share/xdg/calc.desktop          libreoffice-calc.desktop
+	ln -s /usr/lib/libreoffice*/share/xdg/math.desktop          libreoffice-math.desktop
+	ln -s /usr/lib/libreoffice*/share/xdg/draw.desktop          libreoffice-draw.desktop
+	ln -s /usr/lib/libreoffice*/share/xdg/printeradmin.desktop libreoffice-printeradmin.desktop
+	chmod +x /usr/lib/libreoffice*/share/xdg/*.desktop
+
+	cd \$1/usr/bin
+	ln -sf /usr/lib/libreoffice/program/soffice
+	ln -sf /usr/lib/libreoffice/program/soffice libreoffice${VERSION%.*}
+}
+
+post_remove()
+{
+	rm -f \$1/usr/share/applications/libreoffice-*
+}
+
+EOT
+status

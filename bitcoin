@@ -1,0 +1,45 @@
+WEB_SITE="http://$PACKAGE.org/"
+SHORT_DESC="New digital currency for instant payments to anyone, anywhere."
+MAINTAINER="somebody@$PACKAGE.org"
+DEPENDS="libQtGui libQtNetwork bzlib"
+
+# Download tarball
+WGET_URL=$(wget --no-check-certificate -O - $WEB_SITE/en/download | sed \
+      '/linux.tar/!d;s/.*href="\([^"]*\).*/\1/;s|/download$||')
+case "$WGET_URL" in
+ftp*|http*);;
+*) WGET_URL=$WEB_SITE$WGET_URL;;
+esac
+TARBALL="$(basename $WGET_URL)"
+VERSION="$(echo $TARBALL | sed 's/.*coin-\(.*\)-linux.tar.*/\1/')"
+wget --no-check-certificate -O $TARBALL "$WGET_URL"
+
+[ -f $TARBALL ] || abort_package "Could not download $TARBALL from $WGET_URL. Exiting."
+
+mkdir -p $PACKAGE-$VERSION/fs/usr/bin
+tar xzf $TARBALL
+
+mv $PACKAGE-$VERSION-linux/bin/32/* $PACKAGE-$VERSION/fs/usr/bin
+rm -rf $PACKAGE-$VERSION-linux
+
+# extracted pkg can be removed: Save RAM
+rm -f $TARBALL
+
+cd $PACKAGE-$VERSION/fs
+
+# Create menu
+mkdir -p usr/share/applications
+cat > usr/share/applications/$PACKAGE.desktop <<EOT
+[Desktop Entry]
+Version=1.0
+Encoding=UTF-8
+Name=$PACKAGE
+Exec=/usr/bin/$PACKAGE-qt
+Icon=stock_certificate.png
+Terminal=false
+Categories=Application
+Comment=$SHORT_DESC
+Type=Application
+Categories=Office;
+EOT
+cd ../..

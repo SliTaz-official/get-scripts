@@ -1,0 +1,85 @@
+WEB_SITE="http://www.opera.com/"
+URL=http://mirror.switch.ch/ftp/mirror/opera/linux/
+
+get_releases()
+{
+	wget -qO- "$URL?C=M;O=D" | sed 's|.*[Ff]="\([^"/]*\).*|\1|;/[^0-9b]/d'
+}
+
+# Download deb
+for RELEASE in $@ $(get_releases); do
+	TARBALL=$(wget -O- "$URL$RELEASE/" 2>/dev/null |sed 's|.*[Ff]="\(.*\)".*|\1|;/6.d/!d;q'|sed 's/".*//')
+	[ -n "$TARBALL" ] || continue
+	WGET_URL=$URL$RELEASE/$TARBALL
+	wget $WGET_URL
+	[ -s $TARBALL ] && break
+done
+
+[ -f $TARBALL ] || abort_package "Could not download $TARBALL from $URL. Exiting."
+
+mkdir $PACKAGE
+dpkg-deb -e $TARBALL $PACKAGE/meta
+dpkg-deb -x $TARBALL $PACKAGE/fs
+# extracted pkg can be removed: Save RAM
+rm -f $TARBALL
+sed '/^Description:/,$!d;s/^Description://' \
+	< $PACKAGE/meta/control > $PACKAGE/description.txt
+
+SHORT_DESC="$(sed '/^Description:/!d;s/.*: //' $PACKAGE/meta/control)"
+MAINTAINER="$(sed '/^Maintainer:/!d;s/.*: //' $PACKAGE/meta/control)"
+VERSION="$(sed '/^Version:/!d;s/.*: //' $PACKAGE/meta/control)"
+mv $PACKAGE $PACKAGE-$VERSION
+cd $PACKAGE-$VERSION/fs
+
+# Create menu
+mkdir -p usr/share/applications
+cat > usr/share/applications/opera-browser.desktop <<EOT
+[Desktop Entry]
+Version=1.0
+TryExec=opera
+Encoding=UTF-8
+Name=Opera
+Name[af]=opera
+Name[eo]=Opero
+Name[zu]=I Opera
+GenericName=Web browser
+GenericName[bs]=Web preglednik
+GenericName[de]=Web-Browser
+GenericName[eo]=TTT-rigardilo
+GenericName[es]=Navegador web
+GenericName[et]=Veebibrauser
+GenericName[eu]=Web arakatzailea
+GenericName[fi]=WWW-selain
+GenericName[fr]=Un navigateur web
+GenericName[is]=Vafri
+GenericName[it]=Browser Web
+GenericName[nl]=webbrowser
+GenericName[nn]=Nettlesar
+GenericName[pt]=Navegador Web
+GenericName[pt_BR]=Navegador
+GenericName[ro]=Navigator de web
+GenericName[sl]=Spletni brskalnik
+GenericName[ven]=Buronza ya Webu
+GenericName[xh]=Umkhangeli Zincwadi Zokubhaliweyo
+GenericName[zu]=Umkhangeli zincwadi we Web
+Exec=opera %u
+Terminal=false
+Categories=Application;Qt;Network;WebBrowser;X-Ximian-Main;X-Ximian-Toplevel
+Icon=opera-browser
+MimeType=text/html;text/xml;application/xhtml+xml;application/x-mimearchive;application/xml;application/rss+xml;application/rdf+xml;image/svg+xml;image/gif;image/jpeg;image/png;image/x-bmp;image/x-xbm;application/mime
+Comment=Web Browser
+Type=Application
+EOT
+cd ../..
+
+# Remove unwanted locale
+mv $PACKAGE-$VERSION/fs/usr/share/opera/locale $PACKAGE-$VERSION/fs/usr/share/opera/locale-full
+mkdir -p $PACKAGE-$VERSION/fs/usr/share/opera/locale 
+. /etc/locale.conf
+for i in $LANG ${LANG/_/-} ${LANG:0:2} fr pt de zh-cn ; do
+	[ -d $PACKAGE-$VERSION/fs/usr/share/opera/locale-full/$i ] &&
+	cp -a $PACKAGE-$VERSION/fs/usr/share/opera/locale-full/$i \
+		$PACKAGE-$VERSION/fs/usr/share/opera/locale
+done
+rm -rf $PACKAGE-$VERSION/fs/usr/share/opera/locale-full
+rm -rf $PACKAGE-$VERSION/fs/usr/share/pixmaps

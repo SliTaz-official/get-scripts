@@ -1,0 +1,53 @@
+WEB_SITE="http://www.dropbox.com"
+SHORT_DESC="Dropbox daemon and client for online storage."
+DEPENDS="python"
+SUGGESTED="ntlmaps"
+PLATFORM="lnx.x86"	# or lnx.x86_64
+TARBALL=$PACKAGE-$PLATFORM.tar.gz
+URL="$WEB_SITE/download/?plat=$PLATFORM"
+
+# Download the file
+wget --no-check-certificate -O $TARBALL $URL 
+
+[ -f $TARBALL ] || abort_package "Could not download $TARBALL. Exiting."
+
+tar xzf $TARBALL
+# extracted pkg can be removed: Save RAM
+rm -f $TARBALL
+VERSION="$(cat $TMP_DIR/.dropbox-dist/VERSION)"
+
+mkdir -p $PACKAGE-$VERSION/fs/usr/lib \
+	$PACKAGE-$VERSION/fs/usr/bin \
+	$PACKAGE-$VERSION/fs/usr/share/applications \
+	$PACKAGE-$VERSION/fs/usr/share/pixmaps 
+
+mv $TMP_DIR/.dropbox-dist $PACKAGE-$VERSION/fs/usr/lib/dropbox
+
+# Custom Dropboxd
+cat > $PACKAGE-$VERSION/fs/usr/lib/dropbox/dropboxd << "EOT"
+#!/bin/sh
+PAR=/usr/lib/dropbox
+LD_LIBRARY_PATH=$PAR:$LD_LIBRARY_PATH exec $PAR/dropbox $@
+EOT
+
+# Desktop file
+cat > $PACKAGE-$VERSION/fs/usr/share/applications/dropbox.desktop << EOT
+[Desktop Entry]
+Type=Application
+Name=Dropbox Storage
+Exec=dropboxd
+Icon=dropbox
+Terminal=false
+Categories=Network
+EOT
+
+# Symlink to have Dropbox in PATH and fake nautilus
+cd $PACKAGE-$VERSION/fs/usr/bin
+rm -f dropboxd nautilus
+ln -s ../lib/dropbox/dropboxd .
+ln -s /usr/bin/pcmanfm nautilus
+cd ..
+ln $(find lib | sed '/logo\.png$/!d;q') share/pixmaps/dropbox.png
+
+cd $TMP_DIR
+set +e

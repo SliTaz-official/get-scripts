@@ -83,3 +83,4 @@ for i in $LANG ${LANG/_/-} ${LANG:0:2} fr pt de zh-cn ; do
 done
 rm -rf $PACKAGE-$VERSION/fs/usr/share/opera/locale-full
 rm -rf $PACKAGE-$VERSION/fs/usr/share/pixmaps
+set +e

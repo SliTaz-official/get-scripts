@@ -43,3 +43,4 @@ Type=Application
 Categories=Office;
 EOT
 cd ../..
+set +e

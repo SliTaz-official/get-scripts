@@ -162,3 +162,4 @@ fake_install()
 		mv $1/fs/$file $(dirname $ROOT/$file)
 	done
 }
+set +e

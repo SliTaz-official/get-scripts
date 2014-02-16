@@ -157,3 +157,4 @@ post_remove()
 
 EOT
 status
+set +e

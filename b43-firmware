@@ -13,12 +13,18 @@ b43		Broadcom $MODULE firmware.
 b43legacy	Broadcom $MODULE firmware (BCM4306 rev2 or 802.11b chips).
 ipw2100		Intel PRO/Wireless 2100 firmware.
 ipw2200		Intel PRO/Wireless 2200BG firmware.
-iwlwifi-3945	Intel PRO/Wireless 3945ABG/BG firmware.
-iwlwifi-4965	Intel WiFi Link 4965AGN firmware.
-iwlwifi-5000	Intel Wireless WiFi Link 5000AGN firmware.
+iwlwifi-5000	Intel Wireless WiFi Link 5000AGN, 5300AGN and 5350AGN firmware.
 iwlwifi-5150	Intel Wireless WiFi Link 5150AGN firmware.
-iwlwifi-1000	Intel Wireless WiFi Link 1000BGN firmware.
+iwlwifi-100	Intel Wireless WiFi Link 100N firmware.
+iwlwifi-105	Intel Wireless WiFi Link 105N firmware.
+iwlwifi-135	Intel Wireless WiFi Link 135N firmware.
+iwlwifi-1000	Intel Wireless WiFi Link 1000N firmware.
+iwlwifi-2000	Intel Wireless WiFi Link 2200 Series Wi-fi Adapters.
+iwlwifi-2030	Intel Wireless WiFi Link 2230 Series Wi-fi Adapters.
+iwlwifi-6000gda	Intel Wireless WiFi Link 6000 Series Wi-fi Adapters.
+iwlwifi-6000gdb	Intel Wireless WiFi Link 6000 Series Wi-fi Adapters.
 iwlwifi-6000	Intel Wireless WiFi Link 6000 Series Wi-fi Adapters.
+iwlwifi-6050	Intel Wireless WiFi Link 6050 Series Wi-fi Adapters.
 rt61		new RT2x00 RT61 Wireless Lan firmware.
 rt61pci		new RT2x00 RT61 Wireless Lan firmware.
 rt73		new RT2x00 RT73(RT2571W) Wireless Lan firmware.
@@ -54,10 +60,9 @@ ipw2*)
 	WGET_URL="$(wget -O - $WEB_SITE | sed '/-fw/!d;s/.*href="\([^"]*\).*/\1/')$MODULE-fw-$VERSION.tgz"
 	;;
 iwlwifi-*)
-	WEB_SITE="http://www.intellinuxwireless.org/?n=Downloads"
-	VERSION=$(wget -O - $WEB_SITE | sed -e "/$MODULE-/!d" -e \
-		's/.*-ucode-\([0-9\.-]*\).t.*/\1/;q')
-	WGET_URL="http://www.intellinuxwireless.org/iwlwifi/downloads/$MODULE-ucode-$VERSION.tgz"
+	WEB_SITE="http://wireless.kernel.org/en/users/Drivers/iwlwifi/"
+	WGET_URL="$(wget -O - $WEB_SITE | sed '/-ucode-/!d;s/.*href="\([^"]*\).*/\1/;/'${MODULE%firmware}'/!d' | sed '$!d')"
+	VERSION="$(echo "$WGET_URL" | sed 's/.*-ucode-\(.*\).t.*/\1/')"
 	CATEGORY="base-system"
 	;;
 rt61*)
@@ -89,6 +94,11 @@ zd1211*)
 	WEB_SITE="http://packages.debian.org/etch/zd1211-firmware"
 	WGET_URL="$WGET_URL/zd1211-firmware_${VERSION}_all.deb"
 	;;
+esac
+
+case "$WGET_URL" in
+ftp*|http*) ;;
+*) WGET_URL="${WEB_SITE%/}/$WGET_URL"
 esac
 
 # We need drivers, the extractor and tools.

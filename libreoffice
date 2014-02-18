@@ -16,6 +16,7 @@ DIR="stable"
 PREFIX="LibreOffice"
 SUFFIX="Linux_x86_rpm.tar.gz"
 WGET_URL="http://download.documentfoundation.org/libreoffice/$DIR"
+LICENSE="LGPL3"
 
 VERSION="$(basename $(wget -O - $WGET_URL/ 2> /dev/null | \
 	sed '/href=\"[0-9]/!d;s/.*href=\"//;s/[/\">].*//' | tail -1))"

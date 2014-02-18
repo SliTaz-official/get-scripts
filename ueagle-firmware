@@ -1,0 +1,38 @@
+DEPENDS=""
+
+wget-ueagle()
+{
+	while read url ; do
+		WGET_URL=$url/$1
+		wget $WGET_URL
+		[ -s $1 ] || continue
+		tar xzf $1
+		return
+	done
+	abort_package "Could not download $1. Exiting."
+}
+
+mkdir -p $PACKAGE-$VERSION/fs/lib/firmware
+VERSION="1.1"
+TARBALL="ueagle-data-$VERSION.tar.gz"
+SHORT_DESC="Firmware for Fast800 USB ADSL Modem."
+SOURCE="ueagle-data"
+WEB_SITE="http://eagle-usb.org/"
+wget-ueagle ueagle4-data-1.0.tar.gz <<EOT
+ftp://ftp.by.debian.org/pub/gentoo-distfiles/distfiles
+http://pkgs.fedoraproject.org/repo/pkgs/ueagle-atm4-firmware/ueagle4-data-1.0.tar.gz/7b6b8b1dfe5faaab407c8e52638fa72b
+ftp://ftp.uni-frankfurt.de/pub/Mirrors2/gentoo.org/distfiles
+ftp://84.39.110.99/gentoo/distfiles
+EOT
+wget-ueagle $TARBALL <<EOT
+http://castet.matthieu.free.fr/eagle/non-free
+ftp://ftp.coolmax.one.pl/pub/linux/repository/pkg/linux-atm/Internet
+http://eagle-usb.org/ueagle-atm/non-free
+EOT
+mkdir -p $PACKAGE-$VERSION/fs/lib/firmware/ueagle-atm
+cp -a ueagle-*/*.fw ueagle-*/*.bin ueagle4*/*.fw ueagle4*/*.bin* \
+	$PACKAGE-$VERSION/fs/lib/firmware/ueagle-atm
+chown root.root $PACKAGE-$VERSION/fs/lib/firmware/ueagle-atm/*
+ln $PACKAGE-$VERSION/fs/lib/firmware/ueagle-atm/CMV4p.bin.v2 \
+	$PACKAGE-$VERSION/fs/lib/firmware/ueagle-atm/CMV4p.bin || true
+set +e

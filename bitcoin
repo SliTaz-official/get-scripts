@@ -2,10 +2,17 @@ WEB_SITE="http://$PACKAGE.org/"
 SHORT_DESC="New digital currency for instant payments to anyone, anywhere."
 MAINTAINER="somebody@$PACKAGE.org"
 DEPENDS="libQtGui libQtNetwork bzlib"
+LICENSE="MIT"
 
 # Download tarball
-WGET_URL=$(wget --no-check-certificate -O - $WEB_SITE/en/download | sed \
-      '/linux.tar/!d;s/.*href="\([^"]*\).*/\1/;s|/download$||')
+case "$PACKAGE" in
+bitcoin)
+	WGET_URL=$(wget --no-check-certificate -O - $WEB_SITE/en/download | sed \
+	      '/linux.tar/!d;s/.*href="\([^"]*\).*/\1/;s|/download$||') ;;
+litecoin)
+	WGET_URL=$(wget --no-check-certificate -O - $WEB_SITE | sed \
+	      '/linux.tar/!d;;s/.*href="\([^"]*\).*/\1/;q') ;;
+esac
 case "$WGET_URL" in
 ftp*|http*);;
 *) WGET_URL=$WEB_SITE$WGET_URL;;
@@ -17,7 +24,7 @@ wget --no-check-certificate -O $TARBALL "$WGET_URL"
 [ -f $TARBALL ] || abort_package "Could not download $TARBALL from $WGET_URL. Exiting."
 
 mkdir -p $PACKAGE-$VERSION/fs/usr/bin
-tar xzf $TARBALL
+busybox tar xf $TARBALL
 
 mv $PACKAGE-$VERSION-linux/bin/32/* $PACKAGE-$VERSION/fs/usr/bin
 rm -rf $PACKAGE-$VERSION-linux

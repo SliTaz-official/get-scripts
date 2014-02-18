@@ -1,0 +1,27 @@
+DEPENDS=""
+
+VERSION="3.012"
+mkdir -p $PACKAGE-$VERSION/fs/lib/firmware
+TARBALL="SpeedTouch330_firmware_$(echo $VERSION | sed 's/\.//').zip"
+SHORT_DESC="Firmware for SpeedTouch ADSL Modem."
+WEB_SITE="http://www.linux-usb.org/SpeedTouch/"
+#http://speedtouch.hysplace.co.uk/firmware.htm
+#URL="http://www.speedtouch.com/download/drivers/USB/$TARBALL"
+#from http://www.filewatcher.com/m/SpeedTouch330_firmware_3012.zip.769125-0.html
+URL="ftp://ftp.netbsd.org/pub/pkgsrc/distfiles/$TARBALL"
+wget $URL
+[ $TARBALL ] || abort_package "Could not download $TARBALL. Exiting."
+unzip -n $(basename $URL)
+wget http://www.linux-usb.org/SpeedTouch/firmware/firmware-extractor.tar.gz
+tar xzf firmware-extractor.tar.gz
+cd firmware-extractor/
+which gcc || tazpkg get-install gcc
+gcc -o firmware-extractor firmware.c
+FIRMWARE="ZZZL_$VERSION"
+[ "$PACKAGE" = "speedtouch-firmware" ] && FIRMWARE="KQD6_$VERSION"
+cp ../$FIRMWARE mgmt.o
+./firmware-extractor mgmt.o
+install -m 600 speedtch-1.bin speedtch-2.bin \
+	../$PACKAGE-$VERSION/fs/lib/firmware
+cd ..
+set +e

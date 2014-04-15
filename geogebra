@@ -18,7 +18,7 @@ sed '/^Description:/,$!d;s/^Description://' \
 SHORT_DESC="$(sed '/^Description:/!d;s/.*: //' $PACKAGE/meta/control)"
 MAINTAINER="$(sed '/^Maintainer:/!d;s/.*: //' $PACKAGE/meta/control)"
 VERSION="$(sed '/^Version:/!d;s/.*: //' $PACKAGE/meta/control)"
-TARBALL=$PACKAGE-$VERSION.deb
+TARBALL=${PACKAGE}_$VERSION.deb
 mv $PACKAGE $PACKAGE-$VERSION
 
 set +e

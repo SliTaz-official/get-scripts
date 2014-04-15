@@ -1,0 +1,63 @@
+WEB_SITE="http://www.adobe.com/products/flash/"
+SHORT_DESC="Adobe Flash Player."
+TARBALL="install_flash_player_11_linux.i386.tar.gz"
+
+WGET_URL=http://fpdownload.macromedia.com/get/flashplayer/current/licensing/linux/$TARBALL
+busybox wget -O $TARBALL $WGET_URL
+[ -f $TARBALL ] || abort_package "Could not download $TARBALL. Exiting."
+tar xzf $TARBALL
+VERSION="$(strings libflashplayer.so | sed '/FlashPlayer_/!d;s/.*yer_\(.*\)_Flash.*/\1/;s/_/./g')"
+
+# Install files
+chmod 755 libflashplayer.so
+chown root.root libflashplayer.so
+dir=$PACKAGE-$VERSION/fs
+mkdir -p $dir/usr/share/flash
+mv libflashplayer.so $dir/usr/share/flash
+mv usr/bin $dir/usr
+mv usr/share/icons $dir/usr/share
+mv usr/share/pixmaps $dir/usr/share
+
+# Sanity Check: Reexport firefox libraries if they don't exist
+dir=$PACKAGE-$VERSION/fs/usr/lib
+mkdir -p $dir
+for i in /usr/lib/firefox/*.so ; do
+  	[ -f $i ] && [ -z "`ls /usr/lib/$(basename $i)`" ] && ln -s $i $dir	
+done
+
+# Create pseudo package
+cat > $PACKAGE-$VERSION/receipt <<EOT
+PACKAGE="$PACKAGE"
+VERSION="$VERSION"
+CATEGORY="non-free"
+SHORT_DESC="$SHORT_DESC"
+WEB_SITE="$WEB_SITE"
+DEPENDS="libfirefox curl atk cairo expat fontconfig freetype glib gtk+ libpng \
+nss pango pixman xorg-libICE xorg-libSM xorg-libX11 xorg-libXau xorg-libXcomposite \
+xorg-libXcursor xorg-libXdamage xorg-libXdmcp xorg-libXext xorg-libXfixes \
+xorg-libXinerama xorg-libXrandr xorg-libXrender xorg-libXt zlib"
+
+post_install()
+{
+	echo -n "Processing post install commands..."
+ 
+	[ -d \$1/usr/lib/mozilla/plugins ] || mkdir -p \$1/usr/lib/mozilla/plugins
+	ln -s /usr/share/flash/libflashplayer.so \$1/usr/lib/mozilla/plugins
+	[ -d \$1/opt/google/chrome/plugins ] || mkdir -p \$1/opt/google/chrome/plugins
+	ln -s /usr/share/flash/libflashplayer.so \$1/opt/google/chrome/plugins/libgcflashplayer.so
+	[ -d \$1/usr/lib/opera/plugins ] || mkdir -p \$1/usr/lib/opera/plugins
+	ln -s /usr/share/flash/libflashplayer.so \$1/usr/lib/opera/plugins/libflashplayer.so
+	status
+}
+
+post_remove()
+{
+	echo -n "Processing post remove commands..."
+	rm -f \$1/usr/lib/mozilla/plugins/libflashplayer.so
+	rm -f \$1/opt/google/chrome/plugins/libgcflashplayer.so
+	rm -f \$1/usr/lib/opera/plugins/libflashplayer.so
+	status
+}
+EOT
+
+set +e

@@ -17,6 +17,7 @@ mv libflashplayer.so $dir/usr/share/flash
 mv usr/bin $dir/usr
 mv usr/share/icons $dir/usr/share
 mv usr/share/pixmaps $dir/usr/share
+mv usr/share/applications $dir/usr/share
 
 # Sanity Check: Reexport firefox libraries if they don't exist
 dir=$PACKAGE-$VERSION/fs/usr/lib

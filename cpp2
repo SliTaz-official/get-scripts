@@ -1,8 +1,7 @@
 WEB_SITE="http://www.gnu.org/s/gcc/gcc-2.95"
 VERSION=2.95.4-24
-TARBALL=gcc-2.95_${VERSION}_i386.deb
+TARBALL=cpp-2.95_${VERSION}_i386.deb
 WGET_URL=http://old-releases.ubuntu.com/ubuntu/pool/universe/g/gcc-2.95/$TARBALL
-DEPENDS="cpp2 binutils"
 
 wget $WGET_URL
 [ -f $TARBALL ] || abort_package "Could not download $TARBALL from $URL. Exiting."
@@ -19,7 +18,7 @@ SHORT_DESC="$(sed '/^Description:/!d;s/.*: //' $PACKAGE/meta/control)"
 MAINTAINER="$(sed '/^Maintainer:/!d;s/.*: //' $PACKAGE/meta/control)"
 VERSION="$(sed '/^Version:/!d;s/.*: //' $PACKAGE/meta/control)"
 mv $PACKAGE $PACKAGE-$VERSION
-ln -s gcc-2.95 $PACKAGE-$VERSION/usr/bin/gcc-2
+ln -s cpp-2.95 $PACKAGE-$VERSION/usr/bin/cpp-2
 
 # Remove unwanted files
 rm -rf $PACKAGE-$VERSION/fs/usr/share

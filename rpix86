@@ -1,0 +1,16 @@
+WEB_SITE="http://rpix86.patrickaalto.com/"
+TARBALL="rpix86.tar.gz"
+WGET_URL="$WEB_SITE$TARBALL"
+HOST_ARCH="arm"
+SHORT_DESC="A PC emulator for the Raspberry Pi computer."
+
+wget $WGET_URL
+[ -f $TARBALL ] || abort_package "Could not download $TARBALL from $URL. Exiting."
+
+tar xzf $TARBALL
+VERSION=$(strings rpix86 | sed '/aspberry/!d;s/.*v *//;s/ .*//')
+
+mkdir -p $PACKAGE-$SOURCE/usr/bin
+mv rpix86 $PACKAGE-$SOURCE/usr/bin
+
+set +e

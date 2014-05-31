@@ -1,0 +1,55 @@
+VERSION="24.5.0"
+SHORT_DESC="Browser based on Firefox that's optimised for performance."
+MAINTAINER="al.bobylev@gmail.com"
+CATEGORY="network"
+LICENSE="MPL2"
+WEB_SITE="http://www.palemoon.org/"
+TARBALL=$PACKAGE-$VERSION.en-US.linux-i686.tar.bz2
+WGET_URL=http://sourceforge.net/projects/pm4linux/files/$VERSION/$TARBALL
+TAGS="browser"
+DEPENDS="dbus-glib"
+
+mkdir -p $PACKAGE-$VERSION/fs/opt
+busybox wget -O - $WGET_URL | tar -xjf - -C $PACKAGE-$VERSION/fs/opt
+[ -d $PACKAGE-$VERSION/fs/opt/palemoon ] ||
+abort_package "Could not download $TARBALL from $URL. Exiting."
+
+DESKTOP=$PACKAGE-$VERSION/fs/usr/share/applications/palemoon.desktop
+mkdir -p $(dirname $DESKTOP)
+cat > $DESKTOP << EOA
+[Desktop Entry]
+Type=Application
+Name=Palemoon
+Exec=/opt/palemoon/palemoon %u
+Icon=/opt/palemoon/browser/icons/mozicon128.png
+StartupNotify=true
+Categories=GTK;Network;WebBrowser;
+MimeType=text/html;text/xml;application/xhtml+xml;application/xml;
+EOA
+
+cat > $PACKAGE-$VERSION/description.txt << EOD
+Description
+===========
+
+Pale Moon is an open source, web browser based on Firefox focusing on efficiency
+by leaving out unnecessary features and making optimizations, while maintaining
+compatibility with Firefox extensions and themes.
+
+Pale Moon provides a familiar set of controls and visual feedback similar
+to previous versions of Firefox, including grouped navigation buttons,
+a bookmarks toolbar that is enabled by default, tabs next to page content
+by default, and a functional status bar.
+
+This is a third party build; the original project is at www.palemoon.org.
+For support, check out the wiki at http://pm4linux.sf.net/wiki and the forum
+at http://forum.palemoon.org.
+
+
+Features
+========
+  * Optimized for modern processors (SSE2)
+  * Based on the source code of Firefox
+  * Unnecessary bloat (social API, accessibility features, WebRTC) removed
+  * Support for Firefox extensions (add-ons) and themes
+  * More customization and configuration options than Firefox
+EOD

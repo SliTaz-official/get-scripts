@@ -1,11 +1,13 @@
-VERSION="24.5.0"
+URL=http://sourceforge.net/projects/pm4linux/files
+VERSION="$(wget -O - $URL/ | sed \
+	'/projects\/pm4linux\/files\/[1-9]/!d;s|.*files/\([^/]*\)/.*|\1|;q')"
 SHORT_DESC="Browser based on Firefox that's optimised for performance."
 MAINTAINER="al.bobylev@gmail.com"
 CATEGORY="network"
 LICENSE="MPL2"
 WEB_SITE="http://www.palemoon.org/"
 TARBALL=$PACKAGE-$VERSION.en-US.linux-i686.tar.bz2
-WGET_URL=http://sourceforge.net/projects/pm4linux/files/$VERSION/$TARBALL
+WGET_URL=$URL/$VERSION/$TARBALL
 TAGS="browser"
 DEPENDS="dbus-glib"
 

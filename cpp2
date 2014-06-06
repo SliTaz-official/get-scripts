@@ -1,5 +1,6 @@
 WEB_SITE="http://www.gnu.org/s/gcc/gcc-2.95"
 VERSION=2.95.4-24
+LICENSE="GPL2"
 TARBALL=cpp-2.95_${VERSION}_i386.deb
 WGET_URL=http://old-releases.ubuntu.com/ubuntu/pool/universe/g/gcc-2.95/$TARBALL
 
@@ -16,9 +17,9 @@ sed '/^Description:/,$!d;s/^Description://' \
 
 SHORT_DESC="$(sed '/^Description:/!d;s/.*: //' $PACKAGE/meta/control)"
 MAINTAINER="$(sed '/^Maintainer:/!d;s/.*: //' $PACKAGE/meta/control)"
-VERSION="$(sed '/^Version:/!d;s/.*: //' $PACKAGE/meta/control)"
+#VERSION="$(sed '/^Version:/!d;s/.*: //' $PACKAGE/meta/control)"
 mv $PACKAGE $PACKAGE-$VERSION
-ln -s cpp-2.95 $PACKAGE-$VERSION/usr/bin/cpp-2
+ln -s cpp-2.95 $PACKAGE-$VERSION/fs/usr/bin/cpp-2
 
 # Remove unwanted files
 rm -rf $PACKAGE-$VERSION/fs/usr/share

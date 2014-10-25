@@ -1,0 +1,16 @@
+WEB_SITE="http://varaneckas.com/jad/"
+VERSION="1.5.8e"
+TARBALL="jad"
+CATEGORY="non-free"
+LICENSE="other"
+WGET_URL="https://github.com/honeynet/apkinspector/raw/master/jad${VERSION//./}.linux.static/$TARBALL"
+SHORT_DESC="A Java Decompiler."
+BUILD_DEPENDS="wget"
+
+wget -c --no-check-certificate -O $TARBALL $WGET_URL
+[ -f $TARBALL ] || abort_package "Could not download $TARBALL from $URL. Exiting."
+
+mkdir -p $PACKAGE-$SOURCE/usr/bin
+mv $TARBALL $PACKAGE-$SOURCE/usr/bin
+
+set +e

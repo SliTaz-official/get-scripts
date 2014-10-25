@@ -1,0 +1,16 @@
+WEB_SITE="http://jd.benow.ca/"
+VERSION="0.3.5"
+TARBALL="$PACKAGE-$VERSION.linux.i686.tar.gz"
+CATEGORY="non-free"
+LICENSE="other"
+WGET_URL="$WEB_SITE$PACKAGE/downloads/$TARBALL"
+SHORT_DESC="Yet another fast Java decompiler."
+
+wget -O $TARBALL $WGET_URL
+[ -f $TARBALL ] || abort_package "Could not download $TARBALL from $URL. Exiting."
+
+tar xzf $TARBALL
+mkdir -p $PACKAGE-$SOURCE/usr/bin
+mv $PACKAGE $PACKAGE-$SOURCE/usr/bin
+
+set +e

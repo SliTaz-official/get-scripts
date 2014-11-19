@@ -1,0 +1,26 @@
+WEB_SITE="https://apkstudio.codeplex.com/"
+VERSION="2.0.3b"
+TARBALL="apkstudio-$VERSION-ubuntu-linux.tar.bz2"
+CATEGORY="development"
+LICENSE="CDDL"
+WGET_URL="http://download-codeplex.sec.s-msft.com/Download/Release?ProjectName=apkstudio&DownloadId=909467&FileTime=130554250225130000&Build=20941"
+SHORT_DESC="Android revese-engineering"
+BUILD_DEPENDS="wget"
+
+wget --no-check-certificate -O $TARBALL "$WGET_URL"
+[ -f $TARBALL ] || abort_package "Could not download $TARBALL from $URL. Exiting."
+
+mkdir -p $PACKAGE-$VERSION/usr/share/$PACKAGE $PACKAGE-$VERSION/usr/bin
+tar xjf $TARBALL -C $PACKAGE-$VERSION/usr/share/$PACKAGE
+cat > $PACKAGE-$SOURCE/usr/bin/apkstudio <<EOT
+#!/bin/sh
+
+APKSTUDIO_DIRECTORY=/usr/share/$PACKAGE
+APKSTUDIO_BINARY=$PACKAGE
+export LD_LIBRARY_PATH=\$APKSTUDIO_DIRECTORY
+export QT_QPA_PLATFORM_PLUGIN_PATH=\$APKSTUDIO_DIRECTORY/platforms
+\$APKSTUDIO_DIRECTORY/\$APKSTUDIO_BINARY "\$@" -style gtk+
+EOT
+chmod +x $PACKAGE-$SOURCE/usr/bin/apkstudio
+
+set +e

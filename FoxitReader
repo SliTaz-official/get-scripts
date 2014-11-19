@@ -1,0 +1,35 @@
+WEB_SITE="http://www.foxitsoftware.com/pdf/desklinux/"
+WGET_URL=http://cdn01.foxitsoftware.com/pub/foxit/reader/desktop/linux/
+DEPENDS="gtk+"
+
+while true; do
+	TARBALL=
+	for i in $(wget -O - $WGET_URL | sed \
+		   "/href/!d;s/.*href=.\([^'\"]*\).*/\1/;/^[/?]/d"); do
+		case "$i" in
+		*/) 	TARBALL=$i ;;
+		*deb)	WGET_URL="$WGET_URL$i"
+			TARBALL=$i
+			break 2 ;;
+		esac
+	done
+	[ -z "$TARBALL" ] && echo "Package not found in $WGET_URL" exit 1
+	WGET_URL="$WGET_URL$TARBALL"
+done
+
+wget $WGET_URL
+[ -f $TARBALL ] || abort_package "Could not download $TARBALL from $WGET_URL. Exiting."
+
+mkdir $PACKAGE
+dpkg-deb -e $TARBALL $PACKAGE/meta
+dpkg-deb -x $TARBALL $PACKAGE/fs
+# extracted pkg can be removed: Save RAM
+rm -f $TARBALL
+false && sed '/^Description:/,$!d;s/^Description://' \
+	< $PACKAGE/meta/control > $PACKAGE/description.txt
+
+SHORT_DESC="$(sed '/^Description:/!d;s/.*: //' $PACKAGE/meta/control)"
+#MAINTAINER="$(sed '/^Maintainer:/!d;s/.*: //' $PACKAGE/meta/control)"
+VERSION="$(sed '/^Version:/!d;s/.*: //' $PACKAGE/meta/control)"
+mv $PACKAGE $PACKAGE-$VERSION
+set +e

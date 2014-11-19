@@ -1,10 +1,8 @@
 WEB_SITE="http://jd.benow.ca/"
-VERSION="0.3.5"
-TARBALL="$PACKAGE-$VERSION.linux.i686.tar.gz"
-CATEGORY="non-free"
-LICENSE="other"
-WGET_URL="$WEB_SITE$PACKAGE/downloads/$TARBALL"
 SHORT_DESC="Yet another fast Java decompiler."
+WGET_URL="$(wget -O - $WEB_SITE | sed "/linux.i686/!d;s/.*href=.\([^'\"]*\).*/\1/")"
+TARBALL="$(basename $WGET_URL)"
+VERSION="$(echo $TARBALL | sed 's/.*-\(.*\).linux.*/\1/')"
 
 wget -O $TARBALL $WGET_URL
 [ -f $TARBALL ] || abort_package "Could not download $TARBALL from $URL. Exiting."

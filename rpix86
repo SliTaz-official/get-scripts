@@ -10,7 +10,8 @@ wget $WGET_URL
 tar xzf $TARBALL
 VERSION=$(strings rpix86 | sed '/aspberry/!d;s/.*v *//;s/ .*//')
 
-mkdir -p $PACKAGE-$SOURCE/usr/bin
-mv rpix86 $PACKAGE-$SOURCE/usr/bin
+chmod +x rpix86
+mkdir -p $PACKAGE-$VERSION/fs/usr/bin
+mv rpix86 $PACKAGE-$VERSION/fs/usr/bin
 
 set +e

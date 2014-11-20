@@ -10,9 +10,9 @@ BUILD_DEPENDS="wget"
 wget --no-check-certificate -O $TARBALL "$WGET_URL"
 [ -f $TARBALL ] || abort_package "Could not download $TARBALL from $URL. Exiting."
 
-mkdir -p $PACKAGE-$VERSION/usr/share/$PACKAGE $PACKAGE-$VERSION/usr/bin
-tar xjf $TARBALL -C $PACKAGE-$VERSION/usr/share/$PACKAGE
-cat > $PACKAGE-$SOURCE/usr/bin/apkstudio <<EOT
+mkdir -p $PACKAGE-$VERSION/fs/usr/share/$PACKAGE $PACKAGE-$VERSION/fs/usr/bin
+tar xjf $TARBALL -C $PACKAGE-$VERSION/fs/usr/share/$PACKAGE
+cat > $PACKAGE-$SOURCE/fs/usr/bin/apkstudio <<EOT
 #!/bin/sh
 
 APKSTUDIO_DIRECTORY=/usr/share/$PACKAGE
@@ -21,6 +21,6 @@ export LD_LIBRARY_PATH=\$APKSTUDIO_DIRECTORY
 export QT_QPA_PLATFORM_PLUGIN_PATH=\$APKSTUDIO_DIRECTORY/platforms
 \$APKSTUDIO_DIRECTORY/\$APKSTUDIO_BINARY "\$@" -style gtk+
 EOT
-chmod +x $PACKAGE-$SOURCE/usr/bin/apkstudio
+chmod +x $PACKAGE-$SOURCE/fs/usr/bin/apkstudio
 
 set +e

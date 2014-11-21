@@ -1,6 +1,6 @@
 WEB_SITE="http://www.foxitsoftware.com/pdf/desklinux/"
 WGET_URL=http://cdn01.foxitsoftware.com/pub/foxit/reader/desktop/linux/
-DEPENDS="gtk+"
+DEPENDS="gtk+ cups"
 
 while true; do
 	TARBALL=

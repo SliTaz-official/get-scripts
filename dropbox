@@ -4,10 +4,10 @@ DEPENDS="python"
 SUGGESTED="ntlmaps"
 PLATFORM="lnx.x86"	# or lnx.x86_64
 TARBALL=$PACKAGE-$PLATFORM.tar.gz
-URL="$WEB_SITE/download/?plat=$PLATFORM"
+WGET_URL="$WEB_SITE/download/?plat=$PLATFORM"
 
 # Download the file
-wget --no-check-certificate -O $TARBALL $URL 
+wget --no-check-certificate -O $TARBALL $WGET_URL 
 
 [ -f $TARBALL ] || abort_package "Could not download $TARBALL. Exiting."
 
@@ -22,13 +22,8 @@ mkdir -p $PACKAGE-$VERSION/fs/usr/lib \
 	$PACKAGE-$VERSION/fs/usr/share/pixmaps 
 
 mv $TMP_DIR/.dropbox-dist $PACKAGE-$VERSION/fs/usr/lib/dropbox
-
-# Custom Dropboxd
-cat > $PACKAGE-$VERSION/fs/usr/lib/dropbox/dropboxd << "EOT"
-#!/bin/sh
-PAR=/usr/lib/dropbox
-LD_LIBRARY_PATH=$PAR:$LD_LIBRARY_PATH exec $PAR/dropbox $@
-EOT
+mv -f $PACKAGE-$VERSION/fs/usr/lib/dropbox/dropbox-$PLATFORM*/* \
+	$PACKAGE-$VERSION/fs/usr/lib/dropbox
 
 # Desktop file
 cat > $PACKAGE-$VERSION/fs/usr/share/applications/dropbox.desktop << EOT

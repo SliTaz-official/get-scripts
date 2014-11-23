@@ -6,12 +6,12 @@ TARBALL="SpeedTouch330_firmware_$(echo $VERSION | sed 's/\.//').zip"
 SHORT_DESC="Firmware for SpeedTouch ADSL Modem."
 WEB_SITE="http://www.linux-usb.org/SpeedTouch/"
 #http://speedtouch.hysplace.co.uk/firmware.htm
-#URL="http://www.speedtouch.com/download/drivers/USB/$TARBALL"
+#WGET_URL="http://www.speedtouch.com/download/drivers/USB/$TARBALL"
 #from http://www.filewatcher.com/m/SpeedTouch330_firmware_3012.zip.769125-0.html
-URL="ftp://ftp.netbsd.org/pub/pkgsrc/distfiles/$TARBALL"
-wget $URL
+WGET_URL="ftp://ftp.netbsd.org/pub/pkgsrc/distfiles/$TARBALL"
+wget $WGET_URL
 [ $TARBALL ] || abort_package "Could not download $TARBALL. Exiting."
-unzip -n $(basename $URL)
+unzip -n $(basename $WGET_URL)
 wget http://www.linux-usb.org/SpeedTouch/firmware/firmware-extractor.tar.gz
 tar xzf firmware-extractor.tar.gz
 cd firmware-extractor/

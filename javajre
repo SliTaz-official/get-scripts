@@ -1,20 +1,18 @@
 WEB_SITE="http://java.com/en/download/linux_manual.jsp?locale=en"
 WGET_URL="$(wget -O - "$WEB_SITE" | sed '/Linux rpm/!d;s/.*href="\([^"]*\).*/\1/;q')"
-wget -O p.rpm "$WGET_URL"
-[ -f p.rpm ] || abort_package "Could not download RPM from $WGET_URL. Exiting."
+wget -O - "$WGET_URL" > p.rpm
+[ -s p.rpm ] || abort_package "Could not download RPM from $WGET_URL. Exiting."
 
 VERSION="$(rpm -qip p.rpm | awk '/Version/ { print $3 }')"
 LICENSE="$(rpm -qip p.rpm | awk '/License/ { print $5 }')"
 SHORT_DESC="$(rpm -qip p.rpm | sed '/^Summary/!d;s/.*: //')"
 DEPENDS="xorg-libXtst"
 
-mkdir -p $PACKAGE-$VERSION/fs
+mkdir -p $PACKAGE-$VERSION/fs/usr/lib/mozilla/plugins $PACKAGE-$VERSION/fs/usr/bin
 rpm -qip p.rpm | sed '1,/^Description/d' > $PACKAGE-$VERSION/description.txt
 cd $PACKAGE-$VERSION/fs
 rpm2cpio ../../p.rpm | cpio -id
-mkdir usr/lib/mozilla/plugins usr/bin
 mv usr/java usr/lib
 ln -s /$(ls -d usr/lib/java/jre*/bin/java) usr/bin
 ln -s /$(ls -d usr/lib/java/jre*/lib/i386/libnpjp2.so) usr/lib/mozilla/plugins
 cd ../..
-set +e

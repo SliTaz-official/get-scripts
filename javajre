@@ -6,7 +6,6 @@ wget -O - "$WGET_URL" > p.rpm
 VERSION="$(rpm -qip p.rpm | awk '/Version/ { print $3 }')"
 LICENSE="$(rpm -qip p.rpm | awk '/License/ { print $5 }')"
 SHORT_DESC="$(rpm -qip p.rpm | sed '/^Summary/!d;s/.*: //')"
-DEPENDS="xorg-libXtst"
 
 mkdir -p $PACKAGE-$VERSION/fs/usr/lib/mozilla/plugins $PACKAGE-$VERSION/fs/usr/bin
 rpm -qip p.rpm | sed '1,/^Description/d' > $PACKAGE-$VERSION/description.txt

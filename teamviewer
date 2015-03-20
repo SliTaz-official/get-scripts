@@ -1,8 +1,9 @@
 WEB_SITE=http://www.$PACKAGE.com/
-TARBALL=${PACKAGE}_linux.deb
-WGET_URL=http://download.$PACKAGE.com/download/$TARBALL
+WGET_URL=${WEB_SITE}en/download/linux.aspx
 DEPENDS="bash ncurses alsa-lib zlib xorg-libXext"
 
+WGET_URL=$(wget -O - $WGET_URL | sed '/i386/!d;s/.*"\([^"]*i386[^"]*\).*/\1/')
+TARBALL="$(basename $WGET_URL)"
 wget -O $TARBALL $WGET_URL
 
 [ -f $TARBALL ] || abort_package "Could not download $TARBALL. Exiting."
@@ -23,18 +24,20 @@ VERSION="$(sed '/^Version:/!d;s/.*: //' $PACKAGE/meta/control)"
 mv $PACKAGE $PACKAGE-$VERSION
 
 cd $PACKAGE-$VERSION/fs
-ln -s $(cd usr/bin ; ls $PACKAGE*) usr/bin/$PACKAGE 2> /dev/null || true
+[ -e usr/bin/$PACKAGE ] ||
+ln -s $(cd usr/bin ; ls $PACKAGE* 2> /dev/null) \
+	usr/bin/$PACKAGE 2> /dev/null || true
 mkdir -p usr/share/applications
 sed "s|EXEC|/usr/bin/$PACKAGE|g;s!ICON!/$(find opt | grep $PACKAGE.png)!g" \
 	< $(find opt | grep -E '(desktop.template|\.desktop$)') \
 	> usr/share/applications/$PACKAGE.desktop
-sed -i 's/readlink -e/readlink $0 || echo /' $(find opt | grep /$PACKAGE$)
+sed -i 's/readlink -e/readlink $0 || echo /' \
+	$(find opt -type f | grep /$PACKAGE$)
 mkdir -p etc/init.d
 ln -s /$(find opt | grep /teamviewerd$) etc/init.d/teamviewerd
 cd ../..
 
 # Web viewer (needs flash): https://go.teamviewer.com/v${VERSION%%.*}/
-
 
 cd $TMP_DIR
 set +e

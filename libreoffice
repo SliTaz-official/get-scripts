@@ -1,3 +1,6 @@
+SHORT_DESC="Productivity suite."
+WEB_SITE="http://www.libreoffice.org"
+# end of get.list data
 #!/bin/sh
 # get-LibreOffice - install LibreOffice excl. KDE/Gnome integration & test suite.
 #
@@ -7,9 +10,7 @@
 #
 
 PACKAGE="LibreOffice"
-WEB_SITE="http://www.libreoffice.org"
 CATEGORY="office"
-SHORT_DESC="Productivity suite."
 DEPENDS="cups"
 SUGGESTED="java6-jre"
 DIR="stable"

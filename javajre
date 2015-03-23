@@ -1,4 +1,6 @@
+SHORT_DESC="The lastest java runtime environment"
 WEB_SITE="http://java.com/en/download/linux_manual.jsp?locale=en"
+# end of get.list data
 WGET_URL="$(wget -O - "$WEB_SITE" | sed '/Linux rpm/!d;s/.*href="\([^"]*\).*/\1/;q')"
 wget -O - "$WGET_URL" > p.rpm
 [ -s p.rpm ] || abort_package "Could not download RPM from $WGET_URL. Exiting."

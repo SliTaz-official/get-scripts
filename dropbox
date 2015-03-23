@@ -1,5 +1,6 @@
-WEB_SITE="http://www.dropbox.com"
 SHORT_DESC="Dropbox daemon and client for online storage."
+WEB_SITE="http://www.dropbox.com"
+# end of get.list data
 DEPENDS="python"
 SUGGESTED="ntlmaps"
 PLATFORM="lnx.x86"	# or lnx.x86_64

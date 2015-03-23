@@ -1,3 +1,6 @@
+SHORT_DESC="Install the firmware files for the wireless kernel module"
+# end of get.list data
+
 # install linux-wireless, wireless_tools and b43-fwcutter if needed.
 
 MODULE=${PACKAGE%-firmware}
@@ -6,7 +9,7 @@ DEPENDS=""
 
 MODULE_LIST=""
 while read module desc ; do
-	[ "$MODULE" == "$module" ] && desc="$SHORT_DESC"
+	[ "$MODULE" == "$module" ] && SHORT_DESC="$desc"
 	MODULE_LIST="$MODULE_LIST $module"
 done <<EOT
 b43		Broadcom $MODULE firmware.

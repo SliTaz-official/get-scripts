@@ -1,5 +1,6 @@
-WEB_SITE="http://jd.benow.ca/"
 SHORT_DESC="Yet another fast Java decompiler."
+WEB_SITE="http://jd.benow.ca/"
+# end of get.list data
 WGET_URL="$(wget -O - $WEB_SITE | sed "/linux.i686/!d;s/.*href=.\([^'\"]*\).*/\1/")"
 TARBALL="$(basename $WGET_URL)"
 VERSION="$(echo $TARBALL | sed 's/.*-\(.*\).linux.*/\1/')"

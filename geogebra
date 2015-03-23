@@ -1,4 +1,6 @@
+SHORT_DESC="Dynamic mathematics for learning and teaching"
 WEB_SITE="http://www.geogebra.org/cms/en/"
+# end of get.list data
 DEPENDS="bash java-jre ncurses"
 WGET_URL=http://www.geogebra.org/installers/deb.php
 TARBALL=geogebra.deb

@@ -1,4 +1,6 @@
-WEB_SITE=http://www.$PACKAGE.com/
+SHORT_DESC="Remote Control Application"
+WEB_SITE="http://www.teamviewer.com/"
+# end of get.list data
 WGET_URL=${WEB_SITE}en/download/linux.aspx
 DEPENDS="bash ncurses alsa-lib zlib xorg-libXext"
 

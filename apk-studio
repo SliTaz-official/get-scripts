@@ -1,10 +1,11 @@
+SHORT_DESC="Android revese-engineering"
 WEB_SITE="https://apkstudio.codeplex.com/"
+# end of get.list data
 VERSION="2.0.3b"
 TARBALL="apkstudio-$VERSION-ubuntu-linux.tar.bz2"
 CATEGORY="development"
 LICENSE="CDDL"
 WGET_URL="http://download-codeplex.sec.s-msft.com/Download/Release?ProjectName=apkstudio&DownloadId=909467&FileTime=130554250225130000&Build=20941"
-SHORT_DESC="Android revese-engineering"
 BUILD_DEPENDS="wget"
 
 wget --no-check-certificate -O $TARBALL "$WGET_URL"

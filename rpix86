@@ -1,8 +1,9 @@
+SHORT_DESC="A PC emulator for the Raspberry Pi computer."
 WEB_SITE="http://rpix86.patrickaalto.com/"
+# end of get.list data
 TARBALL="rpix86.tar.gz"
 WGET_URL="$WEB_SITE$TARBALL"
 HOST_ARCH="arm"
-SHORT_DESC="A PC emulator for the Raspberry Pi computer."
 
 wget $WGET_URL
 [ -f $TARBALL ] || abort_package "Could not download $TARBALL from $URL. Exiting."

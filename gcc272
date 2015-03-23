@@ -1,4 +1,6 @@
+SHORT_DESC="GNU C compiler version 2.7.2"
 WEB_SITE="http://www.gnu.org/s/gcc"
+# end of get.list data
 VERSION=2.7.2.3-19
 LICENSE="GPL2"
 TARBALL=gcc272_${VERSION}_i386.deb

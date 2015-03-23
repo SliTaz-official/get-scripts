@@ -1,3 +1,6 @@
+SHORT_DESC="Firmware for Fast800 USB ADSL Modem."
+WEB_SITE="http://eagle-usb.org/"
+# end of get.list data
 DEPENDS=""
 
 wget_ueagle()
@@ -15,9 +18,7 @@ wget_ueagle()
 mkdir -p $PACKAGE-$VERSION/fs/lib/firmware
 VERSION="1.1"
 TARBALL="ueagle-data-$VERSION.tar.gz"
-SHORT_DESC="Firmware for Fast800 USB ADSL Modem."
 SOURCE="ueagle-data"
-WEB_SITE="http://eagle-usb.org/"
 wget_ueagle ueagle4-data-1.0.tar.gz <<EOT
 ftp://ftp.by.debian.org/pub/gentoo-distfiles/distfiles
 http://pkgs.fedoraproject.org/repo/pkgs/ueagle-atm4-firmware/ueagle4-data-1.0.tar.gz/7b6b8b1dfe5faaab407c8e52638fa72b

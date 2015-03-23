@@ -1,4 +1,6 @@
+SHORT_DESC="A Java Decompiler."
 WEB_SITE="http://varaneckas.com/jad/"
+# end of get.list data
 VERSION="1.5.8e"
 TARBALL="jad"
 CATEGORY="non-free"

@@ -1,3 +1,6 @@
+SHORT_DESC="Productivity suite."
+WEB_SITE="http://www.openoffice.org"
+# end of get.list data
 #!/bin/sh
 # get-OpenOffice3, install everything for OpenOffice.org exept KDE/Gnome integration and testsuite.
 #
@@ -7,7 +10,6 @@
 
 PACKAGE="OpenOffice3"
 LICENSE="Apache"
-URL="http://www.openoffice.org"
 PATTERN="Linux_x86_install-rpm"
 
 for MIRROR in \
@@ -107,9 +109,9 @@ cat > $PACKAGE-$VERSION/receipt <<EOT
 PACKAGE="$PACKAGE"
 VERSION="$VERSION"
 CATEGORY="office"
-SHORT_DESC="Productivity suite."
+SHORT_DESC="$SHORT_DESC"
 DEPENDS="java-jre"
-WEB_SITE="$URL"
+WEB_SITE="$WEB_SITE"
 
 post_install()
 {

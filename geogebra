@@ -2,8 +2,12 @@ SHORT_DESC="Dynamic mathematics for learning and teaching"
 WEB_SITE="http://www.geogebra.org/cms/en/"
 # end of get.list data
 DEPENDS="bash java-jre ncurses"
-WGET_URL=http://www.geogebra.org/installers/deb.php
-TARBALL=geogebra.deb
+WGET_URL="http://www.geogebra.net/linux/pool/main/g/"
+WGET_URL="$WGET_URL$(wget -O - "$WGET_URL?C=M;O=D" | \
+	  sed '/href="g/!d;s/.*href="\([^"]*\).*/\1/;q')"
+WGET_URL="$WGET_URL$(wget -O - "$WGET_URL?C=M;O=D" | \
+	  sed '/href/!d;/i386/!d;s/.*href="\([^"]*\).*/\1/;q')"
+TARBALL=$(basename $WGET_URL)
 
 wget -O $TARBALL $WGET_URL
 

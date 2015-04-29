@@ -4,9 +4,10 @@ WEB_SITE="http://www.teamviewer.com/"
 WGET_URL=${WEB_SITE}en/download/linux.aspx
 DEPENDS="bash ncurses alsa-lib zlib xorg-libXext"
 
-WGET_URL=$(wget -O - $WGET_URL | sed '/i386/!d;s/.*"\([^"]*i386[^"]*\).*/\1/')
+WGET_URL=$(wget --no-check-certificate -O - $WGET_URL | \
+	   sed '/i386/!d;s/.*"\([^"]*i386[^"]*\).*/\1/')
 TARBALL="$(basename $WGET_URL)"
-wget -O $TARBALL $WGET_URL
+wget --no-check-certificate -O $TARBALL $WGET_URL
 
 [ -f $TARBALL ] || abort_package "Could not download $TARBALL. Exiting."
 

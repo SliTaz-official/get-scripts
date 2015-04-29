@@ -1,4 +1,4 @@
-SHORT_DESC="GNU ccp version 2""
+SHORT_DESC="GNU ccp version 2"
 WEB_SITE="http://www.gnu.org/s/gcc/gcc-2.95"
 # end of get.list data
 VERSION=2.95.4-24

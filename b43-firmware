@@ -185,4 +185,5 @@ post_install()
 }
 EOT
 
+[ "$PWD" != "$TMP_DIR" ] && mv $PACKAGE-$VERSION $TMP_DIR
 set +e

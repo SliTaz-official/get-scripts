@@ -1,8 +1,9 @@
 SHORT_DESC="GNU ccp version 2"
 WEB_SITE="http://www.gnu.org/s/gcc/gcc-2.95"
-# end of get.list data
-VERSION=2.95.4-24
+CATEGORY="development"
+VERSION="2.95.4-24"
 LICENSE="GPL2"
+# end of get.list data
 TARBALL=cpp-2.95_${VERSION}_i386.deb
 WGET_URL=http://old-releases.ubuntu.com/ubuntu/pool/universe/g/gcc-2.95/$TARBALL
 

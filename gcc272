@@ -1,8 +1,9 @@
 SHORT_DESC="GNU C compiler version 2.7.2"
 WEB_SITE="http://www.gnu.org/s/gcc"
-# end of get.list data
-VERSION=2.7.2.3-19
+CATEGORY="development"
+VERSION="2.7.2.3-19"
 LICENSE="GPL2"
+# end of get.list data
 TARBALL=gcc272_${VERSION}_i386.deb
 WGET_URL=http://old-releases.ubuntu.com/ubuntu/pool/universe/g/gcc272/$TARBALL
 DEPENDS="binutils"

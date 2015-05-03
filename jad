@@ -1,10 +1,10 @@
 SHORT_DESC="A Java Decompiler."
 WEB_SITE="http://varaneckas.com/jad/"
+LICENSE="other"
 # end of get.list data
 VERSION="1.5.8e"
 TARBALL="jad"
 CATEGORY="non-free"
-LICENSE="other"
 WGET_URL="https://github.com/honeynet/apkinspector/raw/master/jad${VERSION//./}.linux.static/$TARBALL"
 SHORT_DESC="A Java Decompiler."
 BUILD_DEPENDS="wget"

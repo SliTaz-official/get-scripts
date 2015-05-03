@@ -1,5 +1,7 @@
 SHORT_DESC="Productivity suite."
 WEB_SITE="http://www.libreoffice.org"
+CATEGORY="office"
+LICENSE="LGPL3"
 # end of get.list data
 #!/bin/sh
 # get-LibreOffice - install LibreOffice excl. KDE/Gnome integration & test suite.
@@ -10,14 +12,12 @@ WEB_SITE="http://www.libreoffice.org"
 #
 
 PACKAGE="LibreOffice"
-CATEGORY="office"
 DEPENDS="cups"
 SUGGESTED="java6-jre"
 DIR="stable"
 PREFIX="LibreOffice"
 SUFFIX="Linux_x86_rpm.tar.gz"
 WGET_URL="http://download.documentfoundation.org/libreoffice/$DIR"
-LICENSE="LGPL3"
 
 VERSION="$(basename $(wget -O - $WGET_URL/ 2> /dev/null | \
 	sed '/href=\"[0-9]/!d;s/.*href=\"//;s/[/\">].*//' | tail -1))"

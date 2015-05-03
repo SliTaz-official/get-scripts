@@ -1,9 +1,9 @@
 SHORT_DESC="New digital currency for instant payments to anyone, anywhere."
+LICENSE="MIT"
 # end of get.list data
 WEB_SITE="http://$PACKAGE.org/"
 MAINTAINER="somebody@$PACKAGE.org"
 DEPENDS="libQtGui libQtNetwork bzlib"
-LICENSE="MIT"
 
 # Download tarball
 case "$PACKAGE" in

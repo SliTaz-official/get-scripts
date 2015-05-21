@@ -64,7 +64,7 @@ GenericName[sl]=Spletni brskalnik
 GenericName[ven]=Buronza ya Webu
 GenericName[xh]=Umkhangeli Zincwadi Zokubhaliweyo
 GenericName[zu]=Umkhangeli zincwadi we Web
-Exec=opera %u
+Exec=sh -c 'XMODIFIERS="@im=none" opera %u'
 Terminal=false
 Categories=Application;Qt;Network;WebBrowser;X-Ximian-Main;X-Ximian-Toplevel
 Icon=opera-browser

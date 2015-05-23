@@ -33,6 +33,9 @@ VERSION="$(sed '/^Version:/!d;s/.*: //' $PACKAGE/meta/control)"
 mv $PACKAGE $PACKAGE-$VERSION
 cd $PACKAGE-$VERSION/fs
 
+# Localized keyboard layout fix
+busybox sed "s|sh$|sh\nexport XMODIFIERS=\"@im=none\"|" -i usr/bin/opera
+
 # Create menu
 mkdir -p usr/share/applications
 cat > usr/share/applications/opera-browser.desktop <<EOT
@@ -64,7 +67,7 @@ GenericName[sl]=Spletni brskalnik
 GenericName[ven]=Buronza ya Webu
 GenericName[xh]=Umkhangeli Zincwadi Zokubhaliweyo
 GenericName[zu]=Umkhangeli zincwadi we Web
-Exec=sh -c 'XMODIFIERS="@im=none" opera %u'
+Exec=opera %u
 Terminal=false
 Categories=Application;Qt;Network;WebBrowser;X-Ximian-Main;X-Ximian-Toplevel
 Icon=opera-browser

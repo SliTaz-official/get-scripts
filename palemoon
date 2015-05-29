@@ -7,6 +7,7 @@ URL=http://sourceforge.net/projects/pm4linux/files
 MAINTAINER="al.bobylev@gmail.com"
 VERSION="$(wget -O - $URL/ | sed \
 	'/projects\/pm4linux\/files\/[1-9]/!d;s|.*files/\([^/]*\)/.*|\1|;q')"
+[ "$1" == "--get-version" ] && echo $VERSION && exit
 TARBALL=$PACKAGE-$VERSION.en-US.linux-i686.tar.bz2
 WGET_URL=$URL/$VERSION/$TARBALL
 TAGS="browser"

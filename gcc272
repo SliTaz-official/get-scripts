@@ -4,6 +4,7 @@ CATEGORY="development"
 VERSION="2.7.2.3-19"
 LICENSE="GPL2"
 # end of get.list data
+[ "$1" == "--get-version" ] && echo $VERSION && exit
 TARBALL=gcc272_${VERSION}_i386.deb
 WGET_URL=http://old-releases.ubuntu.com/ubuntu/pool/universe/g/gcc272/$TARBALL
 DEPENDS="binutils"

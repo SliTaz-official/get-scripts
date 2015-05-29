@@ -33,7 +33,9 @@ do
 	[ -n "$LOC" ] && DIR="localized/$LOC"
 	VERSION="$(basename $(wget -O - $MIRROR/$DIR/ 2> /dev/null | grep \
 	href=\"[0-9] | tail -1 | sed 's/.*href=\"\(.*\)\".*/\1/') 2> /dev/null)"
-	[ -n "$VERSION" ] && break
+	[ -n "$VERSION" ] || continue
+	[ "$1" == "--get-version" ] && echo $VERSION && exit
+	break
 done
 
 if [ -z "$VERSION" ]; then

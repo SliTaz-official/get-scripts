@@ -1,0 +1,33 @@
+SHORT_DESC="Official Firefox build by the Mozilla foundation."
+WEB_SITE="http://www.mozilla.org/firefox"
+CATEGORY="network"
+LICENSE="MPL2"
+# end of get.list data
+URL="http://ftp.mozilla.org/pub/mozilla.org/firefox/releases/?C=M;O=D"
+VERSION=$(wget -O - $URL | sed \
+	  '/href="[0-9\./]*"/!d;s|.*href="[^"]*">\([^</]*\).*|\1|;q')
+[ "$1" == "--get-version" ] && echo $VERSION && exit
+SOURCE="firefox"
+TARBALL="$SOURCE-$VERSION.tar.bz2"
+WGET_URL="${URL%\?*}$VERSION/linux-i686/en-US/$TARBALL"
+TAGS="web-browser"
+HOST_ARCH="i486"
+DEPENDS="gtk+"
+
+wget $WGET_URL
+[ -f $TARBALL ] ||
+abort_package "Could not download $TARBALL from $WGET_URL. Exiting."
+
+DESTDIR=$PACKAGE-$VERSION/fs
+
+mkdir -p \
+	${DESTDIR}/usr/bin \
+	${DESTDIR}/usr/lib/firefox-${VERSION} \
+	${DESTDIR}/usr/share/pixmaps
+tar xjf $TARBALL -C ${DESTDIR}/usr/lib/firefox-${VERSION}
+# /usr/bin/firefox-official + pixmap
+ln -s ../lib/firefox-${VERSION}/firefox ${DESTDIR}/usr/bin/${PACKAGE}
+ln -s ../../lib/firefox-${VERSION}/browser/icons/mozicon128.png \
+	${DESTDIR}/usr/share/pixmaps/${PACKAGE}.png
+# Remove updater files (users can't upgrade anyway)
+rm -f ${DESTDIR}/usr/lib/firefox-${VERSION}/update*

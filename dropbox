@@ -34,7 +34,7 @@ Name=Dropbox Storage
 Exec=dropboxd
 Icon=dropbox
 Terminal=false
-Categories=Network
+Categories=Network;FileTransfer;
 EOT
 
 # Symlink to have Dropbox in PATH and fake nautilus

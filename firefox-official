@@ -33,13 +33,12 @@ cd $DESTDIR/usr/share/pixmaps
 ln -s $(find ../../lib/firefox-$VERSION | sed '/zicon128.png$/!dq) $PACKAGE.png
 cat > $DESTDIR/usr/share/applications/$PACKAGE <<EOT
 [Desktop Entry]
-Encoding=UTF-8
+Type=Application
 Name=Firefox Web Browser (official)
 Name[fr]=Navigateur web Firefox (officiel)
 Exec=firefox-official
 Icon=firefox-official
-Type=Application
-Categories=Application;Network;
+Categories=Network;WebBrowser;
 EOT
 # Remove updater files (users can't upgrade anyway)
 rm -f $DESTDIR/usr/lib/firefox-$VERSION/update*

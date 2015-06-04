@@ -40,9 +40,7 @@ busybox sed "s|sh$|sh\nexport XMODIFIERS=\"@im=none\"|" -i usr/bin/opera
 mkdir -p usr/share/applications
 cat > usr/share/applications/opera-browser.desktop <<EOT
 [Desktop Entry]
-Version=1.0
-TryExec=opera
-Encoding=UTF-8
+Type=Application
 Name=Opera
 Name[af]=opera
 Name[eo]=Opero
@@ -67,13 +65,12 @@ GenericName[sl]=Spletni brskalnik
 GenericName[ven]=Buronza ya Webu
 GenericName[xh]=Umkhangeli Zincwadi Zokubhaliweyo
 GenericName[zu]=Umkhangeli zincwadi we Web
+Comment=Web Browser
 Exec=opera %u
 Terminal=false
-Categories=Application;Qt;Network;WebBrowser;X-Ximian-Main;X-Ximian-Toplevel
+Categories=Qt;Network;WebBrowser;
 Icon=opera-browser
-MimeType=text/html;text/xml;application/xhtml+xml;application/x-mimearchive;application/xml;application/rss+xml;application/rdf+xml;image/svg+xml;image/gif;image/jpeg;image/png;image/x-bmp;image/x-xbm;application/mime
-Comment=Web Browser
-Type=Application
+MimeType=text/html;text/xml;application/xhtml+xml;application/x-mimearchive;application/xml;application/rss+xml;application/rdf+xml;image/svg+xml;image/gif;image/jpeg;image/png;image/x-bmp;image/x-xbm;application/mime;
 EOT
 cd ../..
 

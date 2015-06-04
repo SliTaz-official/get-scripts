@@ -41,16 +41,13 @@ cd $PACKAGE-$VERSION/fs
 mkdir -p usr/share/applications
 cat > usr/share/applications/$PACKAGE.desktop <<EOT
 [Desktop Entry]
-Version=1.0
-Encoding=UTF-8
-Name=$PACKAGE
-Exec=/usr/bin/$PACKAGE-qt
-Icon=stock_certificate.png
-Terminal=false
-Categories=Application
-Comment=$SHORT_DESC
 Type=Application
-Categories=Office;
+Name=$PACKAGE
+Comment=$SHORT_DESC
+Exec=/usr/bin/$PACKAGE-qt
+Icon=stock_certificate
+Terminal=false
+Categories=Office;Finance;
 EOT
 cd ../..
 set +e

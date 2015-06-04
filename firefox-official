@@ -18,16 +18,28 @@ wget $WGET_URL
 [ -f $TARBALL ] ||
 abort_package "Could not download $TARBALL from $WGET_URL. Exiting."
 
-DESTDIR=$PACKAGE-$VERSION/fs
+DESTDIR=$PWD/$PACKAGE-$VERSION/fs
 
 mkdir -p \
-	${DESTDIR}/usr/bin \
-	${DESTDIR}/usr/lib/firefox-${VERSION} \
-	${DESTDIR}/usr/share/pixmaps
-tar xjf $TARBALL -C ${DESTDIR}/usr/lib/firefox-${VERSION}
+	$DESTDIR/usr/bin \
+	$DESTDIR/usr/lib/firefox-$VERSION \
+	$DESTDIR/usr/share/applications \
+	$DESTDIR/usr/share/pixmaps
+tar xjf $TARBALL -C $DESTDIR/usr/lib/firefox-$VERSION
 # /usr/bin/firefox-official + pixmap
-ln -s ../lib/firefox-${VERSION}/firefox ${DESTDIR}/usr/bin/${PACKAGE}
-ln -s ../../lib/firefox-${VERSION}/browser/icons/mozicon128.png \
-	${DESTDIR}/usr/share/pixmaps/${PACKAGE}.png
+cd $DESTDIR/usr/bin
+ln -s $(find ../lib/firefox-$VERSION | sed '/firefox-bin$/!dq) $PACKAGE
+cd $DESTDIR/usr/share/pixmaps
+ln -s $(find ../../lib/firefox-$VERSION | sed '/zicon128.png$/!dq) $PACKAGE.png
+cat > $DESTDIR/usr/share/applications/$PACKAGE <<EOT
+[Desktop Entry]
+Encoding=UTF-8
+Name=Firefox Web Browser (official)
+Name[fr]=Navigateur web Firefox (officiel)
+Exec=firefox-official
+Icon=firefox-official
+Type=Application
+Categories=Application;Network;
+EOT
 # Remove updater files (users can't upgrade anyway)
-rm -f ${DESTDIR}/usr/lib/firefox-${VERSION}/update*
+rm -f $DESTDIR/usr/lib/firefox-$VERSION/update*

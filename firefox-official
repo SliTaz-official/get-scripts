@@ -31,7 +31,7 @@ cd $DESTDIR/usr/bin
 ln -s $(find ../lib/firefox-$VERSION | sed '/firefox-bin$/!dq') $PACKAGE
 cd $DESTDIR/usr/share/pixmaps
 ln -s $(find ../../lib/firefox-$VERSION | sed '/zicon128.png$/!dq') $PACKAGE.png
-cat > $DESTDIR/usr/share/applications/$PACKAGE <<EOT
+cat > $DESTDIR/usr/share/applications/$PACKAGE.desktop <<EOT
 [Desktop Entry]
 Type=Application
 Name=Firefox Web Browser (official)

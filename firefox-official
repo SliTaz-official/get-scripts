@@ -28,9 +28,9 @@ mkdir -p \
 tar xjf $TARBALL -C $DESTDIR/usr/lib/firefox-$VERSION
 # /usr/bin/firefox-official + pixmap
 cd $DESTDIR/usr/bin
-ln -s $(find ../lib/firefox-$VERSION | sed '/firefox-bin$/!dq) $PACKAGE
+ln -s $(find ../lib/firefox-$VERSION | sed '/firefox-bin$/!dq') $PACKAGE
 cd $DESTDIR/usr/share/pixmaps
-ln -s $(find ../../lib/firefox-$VERSION | sed '/zicon128.png$/!dq) $PACKAGE.png
+ln -s $(find ../../lib/firefox-$VERSION | sed '/zicon128.png$/!dq') $PACKAGE.png
 cat > $DESTDIR/usr/share/applications/$PACKAGE <<EOT
 [Desktop Entry]
 Type=Application

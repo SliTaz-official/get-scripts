@@ -28,6 +28,9 @@ wget --no-check-certificate -O $TARBALL "$WGET_URL"
 mkdir -p $PACKAGE-$VERSION/fs/usr/bin
 busybox tar xf $TARBALL
 
+[ -d $PACKAGE-$VERSION/lib ] && for i in bin lib include ; do
+	mv $PACKAGE-$VERSION/$i $PACKAGE-$VERSION/fs/usr
+done
 [ -d $PACKAGE-$VERSION-linux/bin/32 ] &&
 mv $PACKAGE-$VERSION-linux/bin/32/* $PACKAGE-$VERSION/fs/usr/bin
 rm -rf $PACKAGE-$VERSION-linux

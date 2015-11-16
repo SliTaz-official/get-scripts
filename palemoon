@@ -3,13 +3,13 @@ WEB_SITE="http://www.palemoon.org/"
 CATEGORY="network"
 LICENSE="MPL2"
 # end of get.list data
-URL=http://sourceforge.net/projects/pm4linux/files
+URL="http://linux.palemoon.org"
+WGET_URL="$URL$(wget -O - $URL/download/mainline/ | \
+	 sed '/i686/!d;s|.*href="\([^"]*\).*|\1|;q')"
+VERSION="$(echo "$WGET_URL" | sed 's|.*files/\([^/]*\).*|\1|')"
+TARBALL="$(echo "$WGET_URL" | sed 's|.*/||')"
 MAINTAINER="al.bobylev@gmail.com"
-VERSION="$(wget -O - $URL/ | sed \
-	'/projects\/pm4linux\/files\/[1-9]/!d;s|.*files/\([^/]*\)/.*|\1|;q')"
 [ "$1" == "--get-version" ] && echo $VERSION && exit
-TARBALL=$PACKAGE-$VERSION.en-US.linux-i686.tar.bz2
-WGET_URL=$URL/$VERSION/$TARBALL
 TAGS="browser"
 DEPENDS="dbus-glib"
 

@@ -2,7 +2,7 @@ SHORT_DESC="The Best PDF Reader"
 WEB_SITE="http://www.foxitsoftware.com/pdf/desklinux/"
 # end of get.list data
 WGET_URL=http://cdn01.foxitsoftware.com/pub/foxit/reader/desktop/linux/
-DEPENDS="gtk+ cups"
+DEPENDS="gtk+ libcups"
 
 while true; do
 	TARBALL=

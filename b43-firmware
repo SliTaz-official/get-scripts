@@ -93,7 +93,7 @@ rt2870usb)
 zd1211*)
 	WGET_URL="http://mirrors.kernel.org/debian/pool/non-free/z/zd1211-firmware"
 	VERSION=$(wget -O - $WGET_URL | sed -e '/zd1211-firmware/!d' \
-	  -e '/all.deb/!d' -e 's/.*>zd1211-firmware_\(.*\)_all.deb.*/\1/')
+	  -e '/all.deb/!d' -e 's/.*>zd1211-firmware_\(.*\)_all.deb.*/\1/;q')
 	SHORT_DESC="zd1211/zd1211rw Wireless Lan firmware."
 	WEB_SITE="http://packages.debian.org/etch/zd1211-firmware"
 	WGET_URL="$WGET_URL/zd1211-firmware_${VERSION}_all.deb"
@@ -108,8 +108,9 @@ zd1201)
 esac
 
 case "$WGET_URL" in
-ftp*|http*) ;;
-*) WGET_URL="${WEB_SITE%/}/$WGET_URL"
+ftp*|http*) 	;;
+/*)		WGET_URL="$(echo $WEB_SITE | sed 's|\(^.*://[^/]*\).*|\1|')/$WGET_URL" ;;
+*) 		WGET_URL="${WEB_SITE%/}/$WGET_URL" ;;
 esac
 
 # We need drivers, the extractor and tools.

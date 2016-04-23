@@ -22,3 +22,4 @@ for size in $(cd sublime_text/Icon; ls); do
 	ln -fs /opt/sublime_text/Icon/$size/sublime-text.png \
 		../usr/share/icons/hicolor/$size/apps/sublime-text.png
 done
+cd ../../..

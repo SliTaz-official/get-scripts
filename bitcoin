@@ -12,7 +12,7 @@ bitcoin)
 	      '/linux32.tar/!d;s/.*href="\([^"]*\).*/\1/;s|/download$||') ;;
 litecoin)
 	WGET_URL=$(wget --no-check-certificate -O - $WEB_SITE | sed \
-	      '/linux.tar/!d;;s/.*href="\([^"]*\).*/\1/;q') ;;
+	      '/linux32.tar/!d;s/.*href="\([^"]*\).*/\1/;q') ;;
 esac
 case "$WGET_URL" in
 ftp*|http*);;

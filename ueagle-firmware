@@ -36,4 +36,3 @@ cp -a ueagle-*/*.fw ueagle-*/*.bin ueagle4*/*.fw ueagle4*/*.bin* \
 chown root.root $PACKAGE-$VERSION/fs/lib/firmware/ueagle-atm/*
 ln $PACKAGE-$VERSION/fs/lib/firmware/ueagle-atm/CMV4p.bin.v2 \
 	$PACKAGE-$VERSION/fs/lib/firmware/ueagle-atm/CMV4p.bin || true
-set +e

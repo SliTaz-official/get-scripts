@@ -28,4 +28,3 @@ ln -s gcc-2.95 $PACKAGE-$VERSION/fs/usr/bin/gcc-2
 
 # Remove unwanted files
 rm -rf $PACKAGE-$VERSION/fs/usr/share
-set +e

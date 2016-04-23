@@ -61,5 +61,3 @@ post_remove()
 	status
 }
 EOT
-
-set +e

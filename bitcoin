@@ -53,4 +53,3 @@ Terminal=false
 Categories=Office;Finance;
 EOT
 cd ../..
-set +e

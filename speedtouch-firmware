@@ -25,4 +25,3 @@ cp ../$FIRMWARE mgmt.o
 install -m 600 speedtch-1.bin speedtch-2.bin \
 	../$PACKAGE-$VERSION/fs/lib/firmware
 cd ..
-set +e

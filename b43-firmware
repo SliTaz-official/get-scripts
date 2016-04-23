@@ -35,6 +35,7 @@ rt73usb		new RT2x00 RT73(RT2571W) Wireless Lan firmware.
 rt2870usb	RaLink RT2870USB (RT2870/RT2770) WiFi adapter.
 zd1211		zd1211/zd1211rw Wireless Lan firmware.
 zd1211rw	zd1211/zd1211rw Wireless Lan firmware.
+zd1201		ZyDAS ZD1201 Wireless Lan firmware.
 EOT
 
 case "$MODULE" in
@@ -97,6 +98,13 @@ zd1211*)
 	WEB_SITE="http://packages.debian.org/etch/zd1211-firmware"
 	WGET_URL="$WGET_URL/zd1211-firmware_${VERSION}_all.deb"
 	;;
+zd1201)
+	SHORT_DESC="zd1201 Wireless Lan firmware."
+	WEB_SITE="http://linux-lc100020.sourceforge.net/"
+	WGET_URL="$(wget -O - $WEB_SITE | sed '/>Latest/!d;s/.*="\([^"]*\).*/\1/')"
+	TARBALL="$(echo "$WGET_URL" | sed 's|.*/\([^/]*\)?.*|\1|')"
+	VERSION="$(echo "$TARBALL" | sed 's/.*-\([^-]*\)-.*/\1/')"
+	;;
 esac
 
 case "$WGET_URL" in
@@ -113,11 +121,11 @@ do
 done
 
 # Get files
-wget $WGET_URL
-TARBALL="$(basename $WGET_URL)"
+TARBALL="${TARBALL:-$(basename $WGET_URL)}"
+wget -O "$TARBALL" "$WGET_URL"
 [ -s $TARBALL ] || abort_package "Could not download $TARBALL. Exiting."
 
-case "$WGET_URL" in
+case "$TARBALL" in
 *rpm)	rpm2cpio < $TARBALL | cpio -id;;
 *deb)	dpkg-deb -x $TARBALL . ;;
 *bz2)	tar xjf $TARBALL
@@ -126,7 +134,7 @@ case "$WGET_URL" in
 *zip)	unzip $TARBALL;;
 *o)	;;
 esac
-	
+
 # Create pseudo package
 mkdir -p $PACKAGE-$VERSION/fs/lib/firmware $PACKAGE-$VERSION/fs/usr/share/licenses
 case "$MODULE" in 
@@ -142,6 +150,8 @@ iwlwifi*) mv iwlwifi*/iwlwifi*.ucode $PACKAGE-$VERSION/fs/lib/firmware
 		  mv iwlwifi*/*LICENSE* $PACKAGE-$VERSION/fs/usr/share/licenses/intel-iwlwifi-LICENSE.txt	;;
 zd1211*)
 	mv lib/firmware/zd1211 $PACKAGE-$VERSION/fs/lib/firmware ;;
+zd1201)
+	mv $MODULE-$VERSION-fw/*fw $PACKAGE-$VERSION/fs/lib/firmware ;;
 esac
 
 # Creat receipt
@@ -185,5 +195,4 @@ post_install()
 }
 EOT
 
-[ "$PWD" != "$TMP_DIR" ] && mv $PACKAGE-$VERSION $TMP_DIR
-set +e
+[ "$PWD" != "$tmp_dir" ] && mv $PACKAGE-$VERSION $tmp_dir || true

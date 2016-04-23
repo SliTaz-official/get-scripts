@@ -42,5 +42,4 @@ cd ../..
 
 # Web viewer (needs flash): https://go.teamviewer.com/v${VERSION%%.*}/
 
-cd $TMP_DIR
-set +e
+cd $tmp_dir

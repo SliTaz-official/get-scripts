@@ -27,4 +27,3 @@ ln -s cpp-2.95 $PACKAGE-$VERSION/fs/usr/bin/cpp-2
 
 # Remove unwanted files
 rm -rf $PACKAGE-$VERSION/fs/usr/share
-set +e

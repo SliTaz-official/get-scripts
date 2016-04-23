@@ -26,5 +26,3 @@ MAINTAINER="$(sed '/^Maintainer:/!d;s/.*: //' $PACKAGE/meta/control)"
 VERSION="$(sed '/^Version:/!d;s/.*: //' $PACKAGE/meta/control)"
 TARBALL=${PACKAGE}_$VERSION.deb
 mv $PACKAGE $PACKAGE-$VERSION
-
-set +e

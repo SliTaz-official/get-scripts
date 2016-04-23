@@ -14,5 +14,3 @@ VERSION=$(strings rpix86 | sed '/aspberry/!d;s/.*v *//;s/ .*//')
 chmod +x rpix86
 mkdir -p $PACKAGE-$VERSION/fs/usr/bin
 mv rpix86 $PACKAGE-$VERSION/fs/usr/bin
-
-set +e

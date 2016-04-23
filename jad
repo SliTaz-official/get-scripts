@@ -15,5 +15,3 @@ wget -c --no-check-certificate -O $TARBALL $WGET_URL
 chmod +x $TARBALL
 mkdir -p $PACKAGE-$VERSION/fs/usr/bin
 mv $TARBALL $PACKAGE-$VERSION/fs/usr/bin
-
-set +e

@@ -11,5 +11,3 @@ tar xzf $TARBALL
 VERSION="$(echo $TARBALL | sed 's/.*-\(.*\).linux.*/\1/')"
 mkdir -p $PACKAGE-$VERSION/fs/usr/bin
 mv $PACKAGE $PACKAGE-$VERSION/fs/usr/bin
-
-set +e

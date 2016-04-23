@@ -15,14 +15,14 @@ wget --no-check-certificate -O $TARBALL $WGET_URL
 tar xzf $TARBALL
 # extracted pkg can be removed: Save RAM
 rm -f $TARBALL
-VERSION="$(cat $TMP_DIR/.dropbox-dist/VERSION)"
+VERSION="$(cat $tmp_dir/.dropbox-dist/VERSION)"
 
 mkdir -p $PACKAGE-$VERSION/fs/usr/lib \
 	$PACKAGE-$VERSION/fs/usr/bin \
 	$PACKAGE-$VERSION/fs/usr/share/applications \
 	$PACKAGE-$VERSION/fs/usr/share/pixmaps 
 
-mv $TMP_DIR/.dropbox-dist $PACKAGE-$VERSION/fs/usr/lib/dropbox
+mv $tmp_dir/.dropbox-dist $PACKAGE-$VERSION/fs/usr/lib/dropbox
 mv -f $PACKAGE-$VERSION/fs/usr/lib/dropbox/dropbox-$PLATFORM*/* \
 	$PACKAGE-$VERSION/fs/usr/lib/dropbox
 
@@ -45,5 +45,4 @@ ln -s /usr/bin/pcmanfm nautilus
 cd ..
 ln $(find lib | sed '/logo\.png$/!d;q') share/pixmaps/dropbox.png
 
-cd $TMP_DIR
-set +e
+cd $tmp_dir

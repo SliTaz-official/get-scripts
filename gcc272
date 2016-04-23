@@ -27,4 +27,3 @@ mv $PACKAGE $PACKAGE-$VERSION
 
 # Remove unwanted files
 rm -rf $PACKAGE-$VERSION/fs/usr/share
-set +e

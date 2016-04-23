@@ -23,5 +23,3 @@ export QT_QPA_PLATFORM_PLUGIN_PATH=\$APKSTUDIO_DIRECTORY/platforms
 \$APKSTUDIO_DIRECTORY/\$APKSTUDIO_BINARY "\$@" -style gtk+
 EOT
 chmod +x $PACKAGE-$SOURCE/fs/usr/bin/apkstudio
-
-set +e

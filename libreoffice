@@ -161,3 +161,4 @@ post_remove()
 EOT
 status
 [ "$PWD" != "$tmp_dir" ] && mv $PACKAGE-$VERSION $tmp_dir || true
+cd $tmp_dir

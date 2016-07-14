@@ -1,0 +1,14 @@
+WEB_SITE="https://www.plop.at/en/bootmanager/index.html"
+SHORT_DESC="USB boot loader."
+# end of get.list data
+
+WGET_URL="$(wget -O - https://www.plop.at/en/bootmanager/download.html | \
+	    sed '/plpbt/!d/href/!d;s/.*href="*\([^ "]*\).*/\1/;q')"
+TARBALL="$(basename $WGET_URL)"
+VERSION="$(echo $TARBALL | sed 's/.*-\([0-9\.]*\)*.zip/\1/')"
+wget $WGET_URL
+[ -f $TARBALL ] || abort_package
+unzip $TARBALL
+[ -s plpbt*/plpbt.bin ] &&
+mkdir -p $PACKAGE-$VERSION/fs/usr/share/boot &&
+cp plpbt*/plpbt.bin $PACKAGE-$VERSION/fs/usr/share/boot

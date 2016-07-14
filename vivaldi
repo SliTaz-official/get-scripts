@@ -1,0 +1,23 @@
+SHORT_DESC="An advanced browser made with the power user in mind"
+WEB_SITE="https://vivaldi.com/"
+# end of get.list data
+
+DEPENDS="gtk+ bash libcups libexif GConf"
+URL='https://vivaldi.com/download'
+WGET_URL=$(busybox wget -O - "$URL" | sed '/32bit RPM/!d;s|.*href="\([^"]*\).*|\1|')
+TARBALL="$(basename $WGET_URL)"
+
+wget -O $TARBALL $WGET_URL
+[ -s $TARBALL ] || abort_package
+VERSION="$(echo $TARBALL | sed 's|[^0-9]*\(.*\)\.i386.*|\1|')"
+
+# Extract package
+rpm2cpio $TARBALL | cpio -dium
+
+# Add icons
+for size in 16 22 24 32 48 64 128 256; do
+	mkdir -p "usr/share/icons/hicolor/${size}x$size/apps"
+	ln -s /opt/vivaldi/product_logo_$size.png "usr/share/icons/hicolor/${size}x$size/apps/vivaldi.png"
+done
+mkdir -p $PACKAGE-$VERSION/fs
+mv opt usr $PACKAGE-$VERSION/fs

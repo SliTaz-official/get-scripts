@@ -1,0 +1,26 @@
+SHORT_DESC="You will have the whole Wikipedia at hand wherever you go!"
+WEBSITE="http://www.kiwix.org/wiki"
+# end of get.list data
+
+WGET_URL="$(wget -O - $WEBSITE/Software/en | sed '/686/!d;s/.*href="\([^"]*\).*/\1/;q')'
+TARBALL="$(basename $WGET_URL)"
+
+wget -O $TARBALL $WGET_URL
+[ -s $TARBALL ] || abort_package
+
+mkdir -p $PACKAGE-$VERSION/fs/opt $PACKAGE-$VERSION/fs/usr/share/applications
+
+# Extract package
+busybox tar xf $TARBALL -C $PACKAGE-$VERSION/fs/opt
+cat > $PACKAGE-$VERSION/fs/usr/share/applications/kiwix.desktop <<EOT
+[Desktop Entry]
+Type=Application
+Name=Wikipedia Encyclopedia
+Name[fr]=Encyclopédie Wikipedia
+Name[pt]=Enciclopédia Wikipedia
+Name[pt_BR]=Enciclopédia Wikipedia
+Name[ru]=Википедия
+Exec=tazbox su /opt/kiwix/kiwix
+Icon=/opt/kiwix/chrome/icons/default/main.png
+Categories=Office;Database;
+EOT

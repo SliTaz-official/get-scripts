@@ -1,0 +1,28 @@
+SHORT_DESC="Resilient, fast and scalable file synchronization"
+WEB_SITE="https://getsync.com/"
+# end of get.list data
+
+BUILD_DEPENDS="wget"
+WGET_URL="$(wget --no-check-certificate -O - ${WEBSITE}platforms/desktop/ | \
+		sed '/linux-i386/!d;s|.*href="\([^"]*\).*|\1|')"
+TARBALL="$(basename $WGET_URL)"
+
+wget -O $TARBALL $WGET_URL
+[ -s $TARBALL ] || abort_package
+
+tar xvzf $TARBALL
+cp btsync $PACKAGE-$VERSION/fs/usr/bin
+cat README LICENCE.TXT > $PACKAGE-$VERSION/description.txt
+mkdir -p $PACKAGE-$VERSION/fs/usr/bin $PACKAGE-$VERSION/fs/usr/share/applications
+cat > $PACKAGE-$VERSION/fs/usr/share/applications/btsync.desktop <<EOT
+[Desktop Entry]
+Version=1.0
+Encoding=UTF-8
+Name=Btsync
+Name[fr]=Synchroniser des fichiers (btsync)
+Name[it]=Sincronizza file (btsync)
+Exec=btsync  --webui.listen 127.0.0.1:8888
+Terminal=false
+Type=Application
+Categories=Application;Network;
+EOT

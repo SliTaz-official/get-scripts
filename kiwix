@@ -1,5 +1,7 @@
 SHORT_DESC="You will have the whole Wikipedia at hand wherever you go!"
-WEBSITE="http://www.kiwix.org/wiki"
+WEB_SITE="http://www.kiwix.org/wiki"
+CATEGORY="office"
+LICENSE="GPL3"
 # end of get.list data
 
 WGET_URL="$(wget -O - $WEBSITE/Software/en | sed '/686/!d;s/.*href="\([^"]*\).*/\1/;q')"

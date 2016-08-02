@@ -1,5 +1,5 @@
 SHORT_DESC="Resilient, fast and scalable file synchronization"
-WEBSITE="https://getsync.com/"
+WEB_SITE="https://getsync.com/"
 # end of get.list data
 
 BUILD_DEPENDS="wget"

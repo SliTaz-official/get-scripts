@@ -3,13 +3,6 @@ WEB_SITE="http://www.openoffice.org"
 CATEGORY="office"
 LICENSE="Apache"
 # end of get.list data
-#!/bin/sh
-# get-OpenOffice3, install everything for OpenOffice.org exept KDE/Gnome integration and testsuite.
-#
-# (C) 2008 SliTaz - GNU General Public License v3.
-#
-# Author : Eric Joseph-Alexandre <erjo@slitaz.org>
-
 PACKAGE="OpenOffice3"
 PATTERN="Linux_x86_install-rpm"
 
@@ -38,9 +31,7 @@ do
 	break
 done
 
-if [ -z "$VERSION" ]; then
-	abort_package "Can't find VERSION. Abort."
-fi
+[ "$VERSION" ] || abort_package "Can't find VERSION. Abort."
 echo "Selecting $DIR version $VERSION ..."
 TARBALL="$(wget -O - $MIRROR/$DIR/$VERSION/ \
 	2> /dev/null | grep $PATTERN | tail -1 | sed 's/.*href=\"\(.*\)\".*/\1/')"
@@ -64,7 +55,7 @@ if [ ! -f $SOURCE_DIR/$TARBALL ]; then
 fi
 if [ ! -f $SOURCE_DIR/$TARBALL ]; then
 	rm -rf $SOURCE_DIR
-	abort_package "Could not download $TARBALL. Exiting."
+	abort_package
 fi
 
 # Creates TEMP_DIR and extract tarball
@@ -93,17 +84,16 @@ rm -f desktop-integration/*freedesktop*.rpm
 
 
 # Make the package
-mkdir -p $PACKAGE-$VERSION/fs/usr/lib/openoffice  \
-  $PACKAGE-$VERSION/fs/usr/share
+USR=$PACKAGE-$VERSION/fs/usr
+mkdir -p $USR/lib/openoffice $USR/share
 
 # use mv instead of 'cp -a' to save RAM
-mv opt/openoffice* $PACKAGE-$VERSION/fs/usr/lib/openoffice
-mv usr/share/mime $PACKAGE-$VERSION/fs/usr/share
-mv usr/share/icons $PACKAGE-$VERSION/fs/usr/share
-mv usr/bin $PACKAGE-$VERSION/fs/usr
+mv opt/openoffice* $USR/lib/openoffice
+mv usr/share/mime usr/share/icons $USR/share
+mv usr/bin $USR
 
 # relocalized OOo libexec directory
-sed -i 's#/opt/#/usr/lib/openoffice/#'  $PACKAGE-$VERSION/fs/usr/bin/openoffice*
+sed -i 's#/opt/#/usr/lib/openoffice/#'  $USR/bin/openoffice*
 
 # Create receipt
 cat > $PACKAGE-$VERSION/receipt <<EOT
@@ -168,5 +158,3 @@ fake_install()
 		mv $1/fs/$file $(dirname $ROOT/$file)
 	done
 }
-[ "$PWD" != "$tmp_dir" ] && mv $PACKAGE-$VERSION $tmp_dir || true
-cd $tmp_dir

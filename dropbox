@@ -10,24 +10,21 @@ WGET_URL="$WEB_SITE/download/?plat=$PLATFORM"
 # Download the file
 wget --no-check-certificate -O $TARBALL $WGET_URL 
 
-[ -f $TARBALL ] || abort_package "Could not download $TARBALL. Exiting."
+[ -f $TARBALL ] || abort_package
 
 tar xzf $TARBALL
 # extracted pkg can be removed: Save RAM
 rm -f $TARBALL
-VERSION="$(cat $tmp_dir/.dropbox-dist/VERSION)"
+VERSION="$(cat .dropbox-dist/VERSION)"
 
-mkdir -p $PACKAGE-$VERSION/fs/usr/lib \
-	$PACKAGE-$VERSION/fs/usr/bin \
-	$PACKAGE-$VERSION/fs/usr/share/applications \
-	$PACKAGE-$VERSION/fs/usr/share/pixmaps 
+USR=$PACKAGE-$VERSION/fs/usr
+mkdir -p $USR/lib $USR/bin $USR/share/applications $USR/share/pixmaps 
 
-mv $tmp_dir/.dropbox-dist $PACKAGE-$VERSION/fs/usr/lib/dropbox
-mv -f $PACKAGE-$VERSION/fs/usr/lib/dropbox/dropbox-$PLATFORM*/* \
-	$PACKAGE-$VERSION/fs/usr/lib/dropbox
+mv .dropbox-dist $USR/lib/dropbox
+mv -f $USR/lib/dropbox/dropbox-$PLATFORM*/* $USR/lib/dropbox
 
 # Desktop file
-cat > $PACKAGE-$VERSION/fs/usr/share/applications/dropbox.desktop << EOT
+cat > $USR/share/applications/dropbox.desktop << EOT
 [Desktop Entry]
 Type=Application
 Name=Dropbox Storage
@@ -38,11 +35,7 @@ Categories=Network;FileTransfer;
 EOT
 
 # Symlink to have Dropbox in PATH and fake nautilus
-cd $PACKAGE-$VERSION/fs/usr/bin
-rm -f dropboxd nautilus
-ln -s ../lib/dropbox/dropboxd .
-ln -s /usr/bin/pcmanfm nautilus
-cd ..
-ln $(find lib | sed '/logo\.png$/!d;q') share/pixmaps/dropbox.png
-
-cd $tmp_dir
+rm -f $USR/bin/dropboxd $USR/bin/nautilus
+ln -s ../lib/dropbox/dropboxd $USR/bin
+ln -s /usr/bin/pcmanfm $USR/bin/nautilus
+ln $(find $USR/lib | sed '/logo\.png$/!d;q') $USR/share/pixmaps/dropbox.png

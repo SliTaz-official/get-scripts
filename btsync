@@ -10,12 +10,11 @@ TARBALL="$(basename $WGET_URL)"
 wget -O $TARBALL $WGET_URL
 [ -s $TARBALL ] || abort_package
 
-VERSION="$(date +%F | sed 's/-//g')"
 tar xvzf $TARBALL
-cp btsync $PACKAGE-$VERSION/fs/usr/bin
-cat README LICENCE.TXT > $PACKAGE-$VERSION/description.txt
-mkdir -p $PACKAGE-$VERSION/fs/usr/bin $PACKAGE-$VERSION/fs/usr/share/applications
-cat > $PACKAGE-$VERSION/fs/usr/share/applications/btsync.desktop <<EOT
+cp btsync $PACKAGE/fs/usr/bin
+cat README LICENCE.TXT > $PACKAGE/description.txt
+mkdir -p $PACKAGE-$VERSION/fs/usr/bin $PACKAGE/fs/usr/share/applications
+cat > $PACKAGE/fs/usr/share/applications/btsync.desktop <<EOT
 [Desktop Entry]
 Version=1.0
 Encoding=UTF-8

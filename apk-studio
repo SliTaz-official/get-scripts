@@ -9,7 +9,7 @@ WGET_URL="http://download-codeplex.sec.s-msft.com/Download/Release?ProjectName=a
 BUILD_DEPENDS="wget"
 
 wget --no-check-certificate -O $TARBALL "$WGET_URL"
-[ -f $TARBALL ] || abort_package "Could not download $TARBALL from $URL. Exiting."
+[ -f $TARBALL ] || abort_package
 
 mkdir -p $PACKAGE-$VERSION/fs/usr/share/$PACKAGE $PACKAGE-$VERSION/fs/usr/bin
 tar xjf $TARBALL -C $PACKAGE-$VERSION/fs/usr/share/$PACKAGE

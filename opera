@@ -17,7 +17,7 @@ for RELEASE in $@ $(get_releases); do
 	[ -s $TARBALL ] && break
 done
 
-[ -f $TARBALL ] || abort_package "Could not download $TARBALL from $URL. Exiting."
+[ -f $TARBALL ] || abort_package
 
 mkdir $PACKAGE
 dpkg-deb -e $TARBALL $PACKAGE/meta
@@ -31,14 +31,14 @@ SHORT_DESC="$(sed '/^Description:/!d;s/.*: //' $PACKAGE/meta/control)"
 MAINTAINER="$(sed '/^Maintainer:/!d;s/.*: //' $PACKAGE/meta/control)"
 VERSION="$(sed '/^Version:/!d;s/.*: //' $PACKAGE/meta/control)"
 mv $PACKAGE $PACKAGE-$VERSION
-cd $PACKAGE-$VERSION/fs
+USR=$PACKAGE-$VERSION/fs/usr
 
 # Localized keyboard layout fix
-busybox sed "s|sh$|sh\nexport XMODIFIERS=\"@im=none\"|" -i usr/bin/opera
+busybox sed "s|sh$|sh\nexport XMODIFIERS=\"@im=none\"|" -i $USR/bin/opera
 
 # Create menu
-mkdir -p usr/share/applications
-cat > usr/share/applications/opera-browser.desktop <<EOT
+mkdir -p $USR/share/applications
+cat > $USR/share/applications/opera-browser.desktop <<EOT
 [Desktop Entry]
 Type=Application
 Name=Opera
@@ -72,16 +72,13 @@ Categories=Qt;Network;WebBrowser;
 Icon=opera-browser
 MimeType=text/html;text/xml;application/xhtml+xml;application/x-mimearchive;application/xml;application/rss+xml;application/rdf+xml;image/svg+xml;image/gif;image/jpeg;image/png;image/x-bmp;image/x-xbm;application/mime;
 EOT
-cd ../..
 
 # Remove unwanted locale
-mv $PACKAGE-$VERSION/fs/usr/share/opera/locale $PACKAGE-$VERSION/fs/usr/share/opera/locale-full
-mkdir -p $PACKAGE-$VERSION/fs/usr/share/opera/locale 
+mv $USR/share/opera/locale $USR/share/opera/locale-full
+mkdir -p $USR/share/opera/locale 
 . /etc/locale.conf
 for i in $LANG ${LANG/_/-} ${LANG:0:2} en fr ru pt de zh-cn ; do
-	[ -d $PACKAGE-$VERSION/fs/usr/share/opera/locale-full/$i ] &&
-	cp -a $PACKAGE-$VERSION/fs/usr/share/opera/locale-full/$i \
-		$PACKAGE-$VERSION/fs/usr/share/opera/locale
+	[ -d $USR/share/opera/locale-full/$i ] &&
+	mv $USR/share/opera/locale-full/$i $USR/share/opera/locale
 done
-rm -rf $PACKAGE-$VERSION/fs/usr/share/opera/locale-full
-rm -rf $PACKAGE-$VERSION/fs/usr/share/pixmaps
+rm -rf $USR/share/opera/locale-full $USR/share/pixmaps

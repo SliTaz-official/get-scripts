@@ -15,23 +15,18 @@ HOST_ARCH="i486"
 DEPENDS="gtk+"
 
 wget $WGET_URL
-[ -f $TARBALL ] ||
-abort_package "Could not download $TARBALL from $WGET_URL. Exiting."
+[ -f $TARBALL ] || abort_package
 
-DESTDIR=$PWD/$PACKAGE-$VERSION/fs
+USR=$PWD/$PACKAGE-$VERSION/fs/usr
 
-mkdir -p \
-	$DESTDIR/usr/bin \
-	$DESTDIR/usr/lib/firefox-$VERSION \
-	$DESTDIR/usr/share/applications \
-	$DESTDIR/usr/share/pixmaps
-tar xjf $TARBALL -C $DESTDIR/usr/lib/firefox-$VERSION
+mkdir -p $USR/bin $USR/lib/firefox-$VERSION $USR/share/applications $USR/share/pixmaps
+tar xjf $TARBALL -C $USR/lib/firefox-$VERSION
 # /usr/bin/firefox-official + pixmap
-cd $DESTDIR/usr/bin
+cd $USR/bin
 ln -s $(find ../lib/firefox-$VERSION | sed '/firefox-bin$/!dq') $PACKAGE
-cd $DESTDIR/usr/share/pixmaps
+cd $USR/share/pixmaps
 ln -s $(find ../../lib/firefox-$VERSION | sed '/zicon128.png$/!dq') $PACKAGE.png
-cat > $DESTDIR/usr/share/applications/$PACKAGE.desktop <<EOT
+cat > $USR/share/applications/$PACKAGE.desktop <<EOT
 [Desktop Entry]
 Type=Application
 Name=Firefox Web Browser (official)
@@ -41,4 +36,4 @@ Icon=firefox-official
 Categories=Network;WebBrowser;
 EOT
 # Remove updater files (users can't upgrade anyway)
-rm -f $DESTDIR/usr/lib/firefox-$VERSION/update*
+rm -f $USR/lib/firefox-$VERSION/update*

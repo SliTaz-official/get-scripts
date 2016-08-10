@@ -9,7 +9,7 @@ TARBALL=cpp-2.95_${VERSION}_i386.deb
 WGET_URL=http://old-releases.ubuntu.com/ubuntu/pool/universe/g/gcc-2.95/$TARBALL
 
 wget $WGET_URL
-[ -f $TARBALL ] || abort_package "Could not download $TARBALL from $URL. Exiting."
+[ -f $TARBALL ] || abort_package
 
 mkdir $PACKAGE
 dpkg-deb -e $TARBALL $PACKAGE/meta

@@ -1,7 +1,6 @@
 SHORT_DESC="Firmware for SpeedTouch ADSL Modem."
 WEB_SITE="http://www.linux-usb.org/SpeedTouch/"
 # end of get.list data
-DEPENDS=""
 
 VERSION="3.012"
 mkdir -p $PACKAGE-$VERSION/fs/lib/firmware
@@ -11,7 +10,7 @@ TARBALL="SpeedTouch330_firmware_$(echo $VERSION | sed 's/\.//').zip"
 #from http://www.filewatcher.com/m/SpeedTouch330_firmware_3012.zip.769125-0.html
 WGET_URL="ftp://ftp.netbsd.org/pub/pkgsrc/distfiles/$TARBALL"
 wget $WGET_URL
-[ $TARBALL ] || abort_package "Could not download $TARBALL. Exiting."
+[ $TARBALL ] || abort_package
 unzip -n $(basename $WGET_URL)
 wget http://www.linux-usb.org/SpeedTouch/firmware/firmware-extractor.tar.gz
 tar xzf firmware-extractor.tar.gz

@@ -10,7 +10,7 @@ SHORT_DESC="A Java Decompiler."
 BUILD_DEPENDS="wget"
 
 wget -c --no-check-certificate -O $TARBALL $WGET_URL
-[ -f $TARBALL ] || abort_package "Could not download $TARBALL from $URL. Exiting."
+[ -f $TARBALL ] || abort_package
 
 chmod +x $TARBALL
 mkdir -p $PACKAGE-$VERSION/fs/usr/bin

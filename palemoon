@@ -15,8 +15,7 @@ DEPENDS="dbus-glib"
 
 mkdir -p $PACKAGE-$VERSION/fs/opt
 busybox wget -O - $WGET_URL | tar -xjf - -C $PACKAGE-$VERSION/fs/opt
-[ -d $PACKAGE-$VERSION/fs/opt/palemoon ] ||
-abort_package "Could not download $TARBALL from $URL. Exiting."
+[ -d $PACKAGE-$VERSION/fs/opt/palemoon ] || abort_package
 
 DESKTOP=$PACKAGE-$VERSION/fs/usr/share/applications/palemoon.desktop
 mkdir -p $(dirname $DESKTOP)

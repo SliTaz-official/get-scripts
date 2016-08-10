@@ -8,7 +8,7 @@ VERSION=${WGET_URL%_x32*}; VERSION=${VERSION##*_}
 TARBALL="$(basename $WGET_URL)"
 
 busybox wget $WGET_URL
-[ -f $TARBALL ] || abort_package "Could not download $TARBALL from $WGET_URL. Exiting."
+[ -f $TARBALL ] || abort_package
 
 mkdir -p $PACKAGE-$VERSION/fs/opt $PACKAGE-$VERSION/fs/usr/share/applications
 cd $PACKAGE-$VERSION/fs/opt

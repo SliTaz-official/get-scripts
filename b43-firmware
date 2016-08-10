@@ -5,7 +5,6 @@ SHORT_DESC="Install the firmware files for the wireless kernel module"
 
 MODULE=${PACKAGE%-firmware}
 CATEGORY="non-free"
-DEPENDS=""
 
 MODULE_LIST=""
 while read module desc ; do
@@ -124,7 +123,7 @@ done
 # Get files
 TARBALL="${TARBALL:-$(basename $WGET_URL)}"
 wget -O "$TARBALL" "$WGET_URL"
-[ -s $TARBALL ] || abort_package "Could not download $TARBALL. Exiting."
+[ -s $TARBALL ] || abort_package
 
 case "$TARBALL" in
 *rpm)	rpm2cpio < $TARBALL | cpio -id;;
@@ -195,6 +194,3 @@ post_install()
 	fi
 }
 EOT
-
-[ "$PWD" != "$tmp_dir" ] && mv $PACKAGE-$VERSION $tmp_dir || true
-cd $tmp_dir

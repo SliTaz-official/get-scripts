@@ -5,7 +5,7 @@ WGET_URL="$(wget -O - $WEB_SITE | sed "/linux.i686/!d;s/.*href=.\([^'\"]*\).*/\1
 TARBALL="$(basename $WGET_URL)"
 
 wget -O $TARBALL $WGET_URL
-[ -f $TARBALL ] || abort_package "Could not download $TARBALL from $URL. Exiting."
+[ -f $TARBALL ] || abort_package
 
 tar xzf $TARBALL
 VERSION="$(echo $TARBALL | sed 's/.*-\(.*\).linux.*/\1/')"

@@ -9,7 +9,7 @@ WGET_URL=$(wget --no-check-certificate -O - $WGET_URL | \
 TARBALL="$(basename $WGET_URL)"
 wget --no-check-certificate -O $TARBALL $WGET_URL
 
-[ -f $TARBALL ] || abort_package "Could not download $TARBALL. Exiting."
+[ -f $TARBALL ] || abort_package
 
 mkdir $PACKAGE
 dpkg-deb -e $TARBALL $PACKAGE/meta
@@ -38,8 +38,5 @@ sed -i 's/readlink -e/readlink $0 || echo /' \
 	$(find opt -type f | grep /$PACKAGE$)
 mkdir -p etc/init.d
 ln -s /$(find opt | grep /teamviewerd$) etc/init.d/teamviewerd
-cd ../..
 
 # Web viewer (needs flash): https://go.teamviewer.com/v${VERSION%%.*}/
-
-cd $tmp_dir

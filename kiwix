@@ -10,12 +10,11 @@ TARBALL="$(basename $WGET_URL)"
 wget -O $TARBALL $WGET_URL
 [ -s $TARBALL ] || abort_package
 
-VERSION="$(date +%F | sed 's/-//g')"
-mkdir -p $PACKAGE-$VERSION/fs/opt $PACKAGE-$VERSION/fs/usr/share/applications
+mkdir -p $PACKAGE/fs/opt $PACKAGE/fs/usr/share/applications
 
 # Extract package
-busybox tar xf $TARBALL -C $PACKAGE-$VERSION/fs/opt
-cat > $PACKAGE-$VERSION/fs/usr/share/applications/kiwix.desktop <<EOT
+busybox tar xf $TARBALL -C $PACKAGE/fs/opt
+cat > $PACKAGE/fs/usr/share/applications/kiwix.desktop <<EOT
 [Desktop Entry]
 Type=Application
 Name=Wikipedia Encyclopedia

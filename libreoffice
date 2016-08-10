@@ -3,14 +3,6 @@ WEB_SITE="http://www.libreoffice.org"
 CATEGORY="office"
 LICENSE="LGPL3"
 # end of get.list data
-#!/bin/sh
-# get-LibreOffice - install LibreOffice excl. KDE/Gnome integration & test suite.
-#
-# (C) 2010 SliTaz - GNU General Public License v3.
-# Author : Ben Arnold <ben@seawolfsanctuary.com>
-#    via : get-OpenOffice3 (Eric Joseph-Alexandre <erjo@slitaz.org>)
-#
-
 PACKAGE="LibreOffice"
 DEPENDS="cups"
 SUGGESTED="java6-jre"
@@ -60,7 +52,7 @@ if [ ! -f $SOURCE_DIR/$TARBALL ]; then
 fi
 if [ ! -f $SOURCE_DIR/$TARBALL ]; then
 	rm -rf $SOURCE_DIR
-	abort_package "Could not download $TARBALL. Exiting."
+	abort_package
 fi
 
 echo -n "Extracting files (this may take a while): "
@@ -105,16 +97,16 @@ status
 echo -n "Preparing package... "
 
 # Make the package
-mkdir -p $PACKAGE-$VERSION/fs/usr/lib $PACKAGE-$VERSION/fs/usr/share
+USR=$PACKAGE-$VERSION/fs/usr
+mkdir -p $USR/lib $USR/share
 
 # use mv instead of 'cp -a' to save RAM
-mv opt/libreoffice* $PACKAGE-$VERSION/fs/usr/lib/libreoffice
-mv usr/share/mime $PACKAGE-$VERSION/fs/usr/share
-mv usr/share/icons $PACKAGE-$VERSION/fs/usr/share
-mv usr/bin $PACKAGE-$VERSION/fs/usr
+mv opt/libreoffice* $USR/lib/libreoffice
+mv usr/share/mime usr/share/icons $USR/share
+mv usr/bin $USR
 
 # relocalized libexec directory
-bin=$(echo $PACKAGE-$VERSION/fs/usr/bin/libreoffice${VERSION%.*})
+bin=$(echo $USR/bin/libreoffice${VERSION%.*})
 if [ -L $bin ]; then
 	target=$(readlink $bin)
 	rm -f $bin
@@ -160,5 +152,3 @@ post_remove()
 
 EOT
 status
-[ "$PWD" != "$tmp_dir" ] && mv $PACKAGE-$VERSION $tmp_dir || true
-cd $tmp_dir

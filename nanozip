@@ -1,0 +1,12 @@
+SHORT_DESC="An experimental file archiver software."
+WEB_SITE="http://nanozip.net/"
+# end of get.list data
+WGET_URL="$WEB_SITE$(wget -O - $WEB_SITE | \
+	  sed '/linux32/!d;s/.*href="*\([^>"]*\).*/\1/;q')"
+TARBALL="$(basename $WGET_URL)"
+VERSION="$(echo $TARBALL | sed 's/.*-\(.*\).linux32.*/\1/')"
+
+wget $WGET_URL
+unzip $TARBALL
+mkdir -p $PACKAGE-$VERSION/fs/usr/bin
+mv nz $PACKAGE-$VERSION/fs/usr/bin

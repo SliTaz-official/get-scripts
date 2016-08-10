@@ -20,7 +20,7 @@ while true; do
 done
 
 wget $WGET_URL
-[ -f $TARBALL ] || abort_package "Could not download $TARBALL from $WGET_URL. Exiting."
+[ -f $TARBALL ] || abort_package
 
 mkdir $PACKAGE
 dpkg-deb -e $TARBALL $PACKAGE/meta
@@ -33,4 +33,3 @@ false && sed '/^Description:/,$!d;s/^Description://' \
 SHORT_DESC="$(sed '/^Description:/!d;s/.*: //' $PACKAGE/meta/control)"
 #MAINTAINER="$(sed '/^Maintainer:/!d;s/.*: //' $PACKAGE/meta/control)"
 VERSION="$(sed '/^Version:/!d;s/.*: //' $PACKAGE/meta/control)"
-mv $PACKAGE $PACKAGE-$VERSION

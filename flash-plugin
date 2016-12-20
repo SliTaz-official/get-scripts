@@ -1,10 +1,10 @@
 SHORT_DESC="Adobe Flash Player."
 WEB_SITE="http://www.adobe.com/products/flash/"
 # end of get.list data
-TARBALL="install_flash_player_11_linux.i386.tar.gz"
 
-WGET_URL=http://fpdownload.macromedia.com/get/flashplayer/current/licensing/linux/$TARBALL
-busybox wget -O $TARBALL $WGET_URL
+TARBALL="flash_player_npapi_linux.i386.tar.gz"
+WGET_URL=https://fpdownload.macromedia.com/get/flashplayer/current/licensing/linux/$TARBALL
+wget --no-check-certificate -O $TARBALL $WGET_URL
 [ -f $TARBALL ] || abort_package
 tar xzf $TARBALL
 VERSION="$(strings libflashplayer.so | sed '/FlashPlayer_/!d;s/.*yer_\(.*\)_Flash.*/\1/;s/_/./g')"

@@ -1,5 +1,5 @@
 SHORT_DESC="An experimental file archiver software."
-WEB_SITE="http://nanozip.net/"
+WEB_SITE="http://nanozip.ijat.my/"
 # end of get.list data
 WGET_URL="$WEB_SITE$(wget -O - $WEB_SITE | \
 	  sed '/linux32/!d;s/.*href="*\([^>"]*\).*/\1/;q')"

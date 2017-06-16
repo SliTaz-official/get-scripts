@@ -6,7 +6,7 @@ LICENSE="MPL2"
 URL="http://linux.palemoon.org"
 WGET_URL="$URL$(wget -O - $URL/download/mainline/ | \
 	 sed '/i686/!d;s|.*href="\([^"]*\).*|\1|;q')"
-VERSION="$(echo "$WGET_URL" | sed 's|.*files/\([^/]*\).*|\1|')"
+VERSION="$(echo "$WGET_URL" | sed 's|.*-\([0-9\.]*\)\..*|\1|')"
 TARBALL="$(echo "$WGET_URL" | sed 's|.*/||')"
 MAINTAINER="al.bobylev@gmail.com"
 [ "$1" == "--get-version" ] && echo $VERSION && exit

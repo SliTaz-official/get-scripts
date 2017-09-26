@@ -1,7 +1,7 @@
 SHORT_DESC="Opera browser"
 WEB_SITE="http://www.opera.com/"
 # end of get.list data
-URL=https://ftp.opera.com/pub/opera/linux/
+URL=ftp://ftp.opera.com/pub/opera/linux/
 
 get_releases()
 {

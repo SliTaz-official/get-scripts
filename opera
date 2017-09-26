@@ -1,7 +1,7 @@
 SHORT_DESC="Opera browser"
 WEB_SITE="http://www.opera.com/"
 # end of get.list data
-URL=http://mirror.switch.ch/ftp/mirror/opera/linux/
+URL=https://ftp.opera.com/pub/opera/linux/
 
 get_releases()
 {
@@ -9,13 +9,14 @@ get_releases()
 }
 
 # Download deb
-for RELEASE in $@ $(get_releases); do
+### for RELEASE in $@ $(get_releases); do
+	RELEASE=1216
 	TARBALL=$(wget -O- "$URL$RELEASE/" 2>/dev/null |sed 's|.*[Ff]="\(.*\)".*|\1|;/6.d/!d;q'|sed 's/".*//')
 	[ -n "$TARBALL" ] || continue
 	WGET_URL=$URL$RELEASE/$TARBALL
 	wget $WGET_URL
-	[ -s $TARBALL ] && break
-done
+### 	[ -s $TARBALL ] && break
+### done
 
 [ -f $TARBALL ] || abort_package
 

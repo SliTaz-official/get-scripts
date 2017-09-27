@@ -5,18 +5,17 @@ URL=https://ftp.opera.com/pub/opera/linux/
 
 get_releases()
 {
-	wget -qO- "$URL?C=M;O=D" | sed 's|.*[Ff]="\([^"/]*\).*|\1|;/[^0-9b]/d'
+	wget -qO- "$URL" | sed 's|.*[Ff]="\([^"/]*\).*|\1|;/[^0-9b]/d' | tac
 }
 
 # Download deb
-### for RELEASE in $@ $(get_releases); do
-	RELEASE=1216
+for RELEASE in $@ $(get_releases); do
 	TARBALL=$(wget -O- "$URL$RELEASE/" 2>/dev/null |sed 's|.*[Ff]="\(.*\)".*|\1|;/6.d/!d;q'|sed 's/".*//')
 	[ -n "$TARBALL" ] || continue
 	WGET_URL=$URL$RELEASE/$TARBALL
 	wget $WGET_URL
-### 	[ -s $TARBALL ] && break
-### done
+	[ -s $TARBALL ] && break
+done
 
 [ -f $TARBALL ] || abort_package
 

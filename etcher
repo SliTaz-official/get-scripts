@@ -1,0 +1,15 @@
+SHORT_DESC="Burn images to SD cards & USB drives, safely and easily"
+WEB_SITE="https://etcher.io/"
+# end of get.list data
+
+WGET_URL=$(busybox wget -O - "$WEB_SITE/cli/" | sed \
+  '/linux-x86/!d;s|.*href="\([^"]*linux-x86[^"]*\)".*|\1|')
+TARBALL="$(basename $WGET_URL)"
+wget -O $TARBALL $WGET_URL
+[ -s $TARBALL ] || abort_package
+VERSION="$(echo $TARBALL | sed 's|[^0-9]*\(.*\)\-linux.*|\1|')"
+
+busybox xf $TARBALL
+mkdir -p $PACKAGE-$VERSION/fs/usr/share/etcher $PACKAGE-$VERSION/fs/usr/bin
+mv Etcher*/* $PACKAGE-$VERSION/fs/usr/share/etcher
+ln -s /usr/share/etcher/etcher $PACKAGE-$VERSION/fs/usr/bin/etcher

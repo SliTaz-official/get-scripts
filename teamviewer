@@ -5,7 +5,7 @@ WGET_URL=${WEB_SITE}en/download/linux.aspx
 DEPENDS="bash ncurses alsa-lib zlib xorg-libXext"
 
 WGET_URL=$(wget --no-check-certificate -O - $WGET_URL | \
-	   sed '/i386/!d;s/.*"\([^"]*i386[^"]*\).*/\1/')
+	   sed '/i386/!d;s/.*"\([^"]*i386[^"]*\).*/\1/;q')
 TARBALL="$(basename $WGET_URL)"
 wget --no-check-certificate -O $TARBALL $WGET_URL
 
@@ -14,6 +14,7 @@ wget --no-check-certificate -O $TARBALL $WGET_URL
 mkdir $PACKAGE
 dpkg-deb -e $TARBALL $PACKAGE/meta
 dpkg-deb -x $TARBALL $PACKAGE/fs
+find $PACKAGE/fs | grep /script/ | xargs sed -i 's|--append|-a|'
 
 # extracted pkg can be removed: Save RAM
 rm -f $TARBALL

@@ -34,6 +34,13 @@ Terminal=false
 Categories=Network;FileTransfer;
 EOT
 
+# Custom Dropboxd
+cat > $USR/lib/dropbox/dropboxd << "EOT"
+#!/bin/sh
+PAR=/usr/lib/dropbox/$(cd $USR/lib/dropbox; ls dropbox-lnx*)
+LD_LIBRARY_PATH=\$PAR:\$LD_LIBRARY_PATH exec \$PAR/dropbox $@
+EOT
+
 # Symlink to have Dropbox in PATH and fake nautilus
 rm -f $USR/bin/dropboxd $USR/bin/nautilus
 ln -s ../lib/dropbox/dropboxd $USR/bin

@@ -38,7 +38,7 @@ EOT
 cat > $USR/lib/dropbox/dropboxd << "EOT"
 #!/bin/sh
 PAR=/usr/lib/dropbox/$(cd $USR/lib/dropbox; ls dropbox-lnx*)
-LD_LIBRARY_PATH=\$PAR:\$LD_LIBRARY_PATH exec \$PAR/dropbox $@
+LD_LIBRARY_PATH=\$PAR:\$LD_LIBRARY_PATH exec \$PAR/dropboxd $@
 EOT
 
 # Symlink to have Dropbox in PATH and fake nautilus

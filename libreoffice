@@ -16,7 +16,7 @@ VERSION="$(basename $(wget -O - $WGET_URL/ 2> /dev/null | \
 if [ -z "$VERSION" ]; then
 	abort_package "Can't detect an appropriate version. The version numbering or URL may have changed. Aborted."
 fi
-[ "$1" == "--get-version" ] && echo $VERSION && exit
+[ "$1" = "--get-version" ] && echo $VERSION && exit
 VER="${VERSION/\-/}" # without hyphens
 
 

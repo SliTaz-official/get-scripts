@@ -6,7 +6,7 @@ LICENSE="MPL2"
 URL="http://ftp.mozilla.org/pub/mozilla.org/firefox/releases/?C=M;O=D"
 VERSION=$(wget -O - $URL | sed \
 	  '/href="[0-9\./]*"/!d;s|.*href="[^"]*">\([^</]*\).*|\1|;q')
-[ "$1" == "--get-version" ] && echo $VERSION && exit
+[ "$1" = "--get-version" ] && echo $VERSION && exit
 SOURCE="firefox"
 TARBALL="$SOURCE-$VERSION.tar.bz2"
 WGET_URL="${URL%\?*}$VERSION/linux-i686/en-US/$TARBALL"

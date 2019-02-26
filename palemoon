@@ -9,7 +9,7 @@ WGET_URL="$URL$(wget -O - $URL/download/mainline/ | \
 VERSION="$(echo "$WGET_URL" | sed 's|.*-\([0-9\.]*\)\..*|\1|')"
 TARBALL="$(echo "$WGET_URL" | sed 's|.*/||')"
 MAINTAINER="al.bobylev@gmail.com"
-[ "$1" == "--get-version" ] && echo $VERSION && exit
+[ "$1" = "--get-version" ] && echo $VERSION && exit
 TAGS="browser"
 DEPENDS="dbus-glib"
 

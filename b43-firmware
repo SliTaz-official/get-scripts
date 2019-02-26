@@ -8,7 +8,7 @@ CATEGORY="non-free"
 
 MODULE_LIST=""
 while read module desc ; do
-	[ "$MODULE" == "$module" ] && SHORT_DESC="$desc"
+	[ "$MODULE" = "$module" ] && SHORT_DESC="$desc"
 	MODULE_LIST="$MODULE_LIST $module"
 done <<EOT
 b43		Broadcom $MODULE firmware.

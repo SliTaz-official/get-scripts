@@ -138,7 +138,8 @@ post_install()
 	ln -s /usr/lib/libreoffice*/share/xdg/math.desktop          libreoffice-math.desktop
 	ln -s /usr/lib/libreoffice*/share/xdg/draw.desktop          libreoffice-draw.desktop
 	ln -s /usr/lib/libreoffice*/share/xdg/printeradmin.desktop libreoffice-printeradmin.desktop
-	chmod +x /usr/lib/libreoffice*/share/xdg/*.desktop
+	chmod +x \$1/usr/lib/libreoffice*/share/xdg/*.desktop
+	sed -i 's|^[Ee]xec=libreoffice[0-9\.]*|Exec=libreoffice|' \$1/usr/lib/libreoffice*/share/xdg/*.desktop
 
 	cd \$1/usr/bin
 	ln -sf /usr/lib/libreoffice/program/soffice
